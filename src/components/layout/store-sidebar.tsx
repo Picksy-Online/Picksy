@@ -75,7 +75,7 @@ export function StoreSidebar() {
             onMouseLeave={() => setOpen(false)}
         >
             <SidebarHeader className="h-16 border-b flex items-center justify-center">
-                <Logo />
+                <Logo src="/picksy-logo-sidebar.png" className="w-auto h-12" />
             </SidebarHeader>
             <SidebarContent className="p-2 pt-10">
                 <SidebarNavigation />
