@@ -50,7 +50,7 @@ export function ProfileSidebar() {
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader className="h-24 border-b flex items-center justify-start pt-5 pl-[30px]">
+            <SidebarHeader className="h-24 border-b flex items-center justify-start pt-5 pl-2">
                 <Logo src="/picksy-logo-sidebar.png" className="w-auto h-12" />
             </SidebarHeader>
             <SidebarContent>

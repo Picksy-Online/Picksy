@@ -18,7 +18,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-card">
       <div
         className={cn(
-          "grid grid-cols-[auto,1fr] gap-4 px-4 py-1 md:px-6"
+          "grid grid-cols-[auto,1fr] gap-4 px-2 py-1 md:pl-2 md:pr-4"
         )}
       >
         <div className="flex items-center">
