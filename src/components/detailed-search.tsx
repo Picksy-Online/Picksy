@@ -83,6 +83,7 @@ export function DetailedSearch({
                         value={filters.query}
                         onChange={(e) => setFilters({ ...filters, query: e.target.value })}
                         className="pl-10 h-12 text-lg"
+                        suppressHydrationWarning
                     />
                     {filters.query && (
                         <button
