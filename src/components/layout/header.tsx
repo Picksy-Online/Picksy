@@ -18,12 +18,12 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-card">
       <div
         className={cn(
-          "grid grid-cols-[auto,1fr] gap-4 px-4 py-3 md:px-6"
+          "grid grid-cols-[auto,1fr] gap-4 px-4 py-1 md:px-6"
         )}
       >
         <div className="flex items-center">
           <Link href="/">
-            <Logo className="w-[20rem] h-[7rem]" />
+            <Logo className="w-auto h-20" />
           </Link>
         </div>
 
