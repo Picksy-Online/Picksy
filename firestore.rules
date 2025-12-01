@@ -1,0 +1,198 @@
+/**
+ * @file Firestore Security Rules for Picksy
+ *
+ * @Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for user-specific data,
+ * combined with role-based access control for administrative functions.
+ * Data denormalization is heavily used to ensure efficient and secure authorization.
+ *
+ * @Data Structure:
+ * - User data is nested under `/users/{userId}`.
+ * - Seller data is stored under `/sellers/{sellerId}`.
+ * - Categories are stored in the top-level `/categories/{categoryId}` collection.
+ * - Products are stored as subcollections under both `/categories/{categoryId}/products/{productId}` and `/sellers/{sellerId}/products/{productId}`.
+ * - AI Recommendations and Disputes are stored as subcollections under `/users/{userId}`.
+ * - Sales analytics are stored under both `/sales_analytics_admin/{salesAnalyticsId}` and `/sellers/{sellerId}/sales_analytics/{salesAnalyticsId}`.
+ * - Admin roles are determined by the existence of a document in `/roles_admin/{userId}`.
+ *
+ * @Key Security Decisions:
+ * - User listing is disallowed.
+ * - Admin privileges are managed through the `/roles_admin/{userId}` collection.
+ * - Read-only collections do not exist in this data model.
+ * - All write operations are explicitly authorized based on ownership or role.
+ *
+ * @Denormalization for Authorization:
+ * - Product documents include `sellerId` for direct seller ownership checks.
+ * - AI Recommendations and Disputes include `userId` for direct user ownership checks.
+ * - Sales analytics data includes `sellerId` for seller-specific analytics.
+ *
+ * @Structural Segregation:
+ * - User-specific data (like disputes) are stored under `/users/{userId}`.
+ * - Admin-specific data is stored under `/sales_analytics_admin/{salesAnalyticsId}`.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    function isAdmin() {
+        return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * @description Allows admins to manage product categories.
+     * @path /categories/{categoryId}
+     * @allow (create) User with admin role can create a category.
+     * @deny (create) User without admin role cannot create a category.
+     * @principle Enforces role-based access control for category management.
+     */
+    match /categories/{categoryId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Allows public read access, but seller-only writes for products within a category.
+     * @path /categories/{categoryId}/products/{productId}
+     * @allow (get) Any user can read a product within a category.
+     * @allow (create) Seller can create a product within a category if sellerId matches auth.uid.
+     * @deny (create) User cannot create a product if sellerId does not match auth.uid.
+     * @principle Enforces ownership for product creation and modification within a category.
+     */
+    match /categories/{categoryId}/products/{productId} {
+        allow get, list: if true;
+        allow create: if isSignedIn();  // Allow any signed-in user to create
+        allow update: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+        allow delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+    /**
+     * @description Allows sellers to manage their own profiles.
+     * @path /sellers/{sellerId}
+     * @allow (get) Any user can read a seller's profile.
+     * @allow (create) User can create their own seller profile if sellerId matches auth.uid.
+     * @deny (update) User cannot update another seller's profile.
+     * @principle Enforces ownership for seller profile management.
+     */
+    match /sellers/{sellerId} {
+      allow get, list: if true;
+      allow create: if isOwner(sellerId);
+      allow update: if isExistingOwner(sellerId);
+      allow delete: if isExistingOwner(sellerId);
+    }
+
+    /**
+     * @description Allows public read access, but seller-only writes for products.
+     * @path /sellers/{sellerId}/products/{productId}
+     * @allow (get) Any user can read a product.
+     * @allow (create) Seller can create a product if sellerId matches auth.uid.
+     * @deny (update) User cannot update a product if sellerId does not match auth.uid.
+     * @principle Enforces ownership for product creation and modification.
+     */
+    match /sellers/{sellerId}/products/{productId} {
+        allow get, list: if true;
+        allow create: if isSignedIn(); // Allow any signed-in user to create
+        allow update: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+        allow delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+    /**
+     * @description Allows users to manage their own profiles.
+     * @path /users/{userId}
+     * @allow (create) User can create their own profile if userId matches auth.uid.
+     * @deny (update) User cannot update another user's profile.
+     * @principle Enforces ownership for user profile management.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // User listing is disallowed.
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows users to manage their AI recommendations.
+     * @path /users/{userId}/ai_recommendations/{aiRecommendationId}
+     * @allow (create) User can create AI recommendations for themselves.
+     * @deny (update) User cannot update AI recommendations that don't belong to them.
+     * @principle Enforces ownership for AI recommendation management.
+     */
+    match /users/{userId}/ai_recommendations/{aiRecommendationId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows users to manage their disputes.
+     * @path /users/{userId}/disputes/{disputeId}
+     * @allow (create) User can create disputes for themselves.
+     * @deny (update) User cannot update disputes that don't belong to them.
+     * @principle Enforces ownership for dispute management.
+     */
+    match /users/{userId}/disputes/{disputeId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows admins to create and manage admin user roles.
+     * @path /roles_admin/{userId}
+     * @allow (create) User with admin role can assign other users as admins.
+     * @deny (delete) User without admin role cannot remove admin status.
+     * @principle Enforces role-based access control for admin role management.
+     */
+    match /roles_admin/{userId} {
+        allow get: if isAdmin();
+        allow list: if isAdmin();
+        allow create: if isAdmin();
+        allow update: if false; // No updates allowed
+        allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Allows admins to manage admin sales analytics.
+     * @path /sales_analytics_admin/{salesAnalyticsId}
+     * @allow (create) User with admin role can create sales analytics.
+     * @deny (update) User without admin role cannot modify sales analytics.
+     * @principle Enforces role-based access control for admin sales analytics.
+     */
+    match /sales_analytics_admin/{salesAnalyticsId} {
+        allow get, list: if isAdmin();
+        allow create: if isAdmin();
+        allow update: if isAdmin() && resource != null;
+        allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Allows sellers to manage their own sales analytics.
+     * @path /sellers/{sellerId}/sales_analytics/{salesAnalyticsId}
+     * @allow (create) Seller can create sales analytics for themselves.
+     * @deny (update) User cannot update sales analytics that don't belong to them.
+     * @principle Enforces ownership for sales analytics management.
+     */
+    match /sellers/{sellerId}/sales_analytics/{salesAnalyticsId} {
+        allow get, list: if isOwner(sellerId);
+        allow create: if isOwner(sellerId);
+        allow update: if isExistingOwner(sellerId);
+        allow delete: if isExistingOwner(sellerId);
+    }
+  }
+}

@@ -1,0 +1,113 @@
+Picksy: AI-Powered Marketplace for Unique Goods
+Executive Summary
+Picksy is a next-generation e-commerce platform built specifically for Australian not-for-profits and small businesses to sell unique, handcrafted, and vintage items. Leveraging the power of Next.js, Firebase, and Google's Genkit AI, Picksy goes beyond a standard marketplace by offering advanced tools for high-value collectibles and empowering sellers with intelligent automation, creating a trusted and efficient ecosystem for buyers and sellers alike.
+
+1. Core Concept & Value Proposition
+Picksy addresses the challenges faced by small-scale sellers in competing with large e-commerce platforms.
+
+For Buyers: A curated, trustworthy destination for discovering unique goods, with AI-powered tools to validate purchases (especially for collectibles) and find exactly what they want.
+
+For Sellers: An all-in-one platform that simplifies the selling process through AI-assisted listing, condition analysis, and pricing, dramatically reducing the barrier to entry for online sales.
+
+2. Technology Stack
+Frontend: Next.js 14+ (App Router) with React for a fast, SEO-friendly user experience.
+
+Styling: Tailwind CSS and shadcn/ui for a consistent, modern, and accessible design system.
+
+Backend & Infrastructure: Firebase
+
+Authentication: Firebase Auth (Email/Password, Anonymous).
+
+Database: Firestore for real-time user, product, and order data.
+
+Hosting: Firebase App Hosting for global deployment.
+
+AI & Machine Learning: Google's Genkit framework, powering all intelligent features from product recommendations to fraud detection.
+
+3. User Roles & Journeys
+3.1. User Roles
+Buyer: Browses, searches, and purchases items. Can create watchlists and message sellers.
+
+Seller: An approved user who can list products, manage inventory, view analytics, and access AI-powered seller tools.
+
+Administrator: A super-user (seeded via 1@1.com) with full system access for user, product, and content management.
+
+3.2. Sample User Journeys
+A Collector: Discovers a rare card on the /browse page, uses the "Search eBay Sold" feature to validate its price on the product page, and makes a secure purchase.
+
+A New Seller: Uses the "Sell Your Card" tool (/sell-cards) to instantly analyze a card's condition, generate a description, and get a suggested price, listing their first item in minutes.
+
+An Admin: Reviews a flagged product in the /admin/moderation tool, uses the integrated AI content moderation for a second opinion, and removes the item, triggering an automated, AI-generated notification to the seller.
+
+4. Key Features & Capabilities
+4.1. Marketplace Discovery & Personalization
+Adaptive Product Browsing (/browse): Features multiple view modes (grid, list, gallery), infinite scroll, and advanced filtering for a tailored shopping experience.
+
+Intelligent Product Pages (/product/[id]): Showcase items with image zoom and are enhanced by an AI-powered "You Might Also Like" recommendation engine.
+
+Specialized Categories: Dedicated, optimized layouts for high-interest categories like "Collector Cards" and "Collectibles."
+
+Proactive Watchlist: Users can save search criteria and are simulated to receive notifications when matching items are listed.
+
+4.2. Seller Empowerment & Dashboard
+The Seller Dashboard (/dashboard) is a centralized hub for managing a storefront.
+
+Business Insights: At-a-glance analytics for revenue, sales, and active listings.
+
+AI-Powered Listing Suite:
+
+Cross-Platform Lister: Repurposes a Picksy listing with optimized titles, descriptions, and tags for platforms like eBay and Etsy.
+
+Sell Your Card Tool: A comprehensive workflow that uses a device's camera to capture a card, AI-analyze its condition (centering, corners, etc.), suggest a market-driven price, and auto-generate a compelling description.
+
+Private Collections: Sellers can create exclusive, password-protected collections viewable only by approved friends, enabling direct or pre-release sales.
+
+4.3. Admin, Moderation & Analytics
+The Admin Dashboard (/admin) provides full oversight and control.
+
+Platform Overview: Key metrics on total revenue, active sellers, and disputes.
+
+Content & User Management: Interfaces to manage all products, users, and featured site content (hero images, collections).
+
+AI-Powered Integrity Tools:
+
+Content Moderation: Analyzes product listings for policy violations or fake goods.
+
+Fraud Detection: Scans user messages and transactions for suspicious patterns.
+
+Visual Analytics: Charts and graphs tracking sales and revenue trends over time.
+
+5. Strategic AI Integrations (Powered by Genkit)
+Picksy's AI is not a gimmick; it's a core utility embedded across the platform.
+
+Seller Tools: check-card-condition, suggest-price, generate-description, cross-platform-posting.
+
+Buyer Tools: ai-powered-product-recommendations, proactive-item-finder, search-ebay-sold.
+
+Admin & Platform Integrity: ai-content-moderation, detect-fraud, notify-seller-of-removal.
+
+6. Authentication & Security
+Security is paramount, implemented through a defense-in-depth approach:
+
+Firebase Authentication: Handles secure user sign-in.
+
+Robust Firestore Rules: A comprehensive set of security rules ensures data isolation:
+
+Users read/write only their own private data.
+
+Sellers have full control only over their own products and store.
+
+Admins have elevated, platform-wide read/write access.
+
+Public product data is readable by all authenticated users.
+
+Application-Level Access Control: The UI conditionally renders features based on user role (e.g., Seller Dashboard, Admin panels). Age verification and private collection access are enforced at the application logic level.
+
+7. Future Considerations
+Payment Gateway Integration: Directly handle transactions within Picksy for a seamless user experience.
+
+Advanced Seller Analytics: Deeper insights into customer behavior and sales performance.
+
+Mobile App: A dedicated React Native or Native app for iOS and Android.
+
+Expanded AI Features: AI-powered customer service chat or automated review summarization.

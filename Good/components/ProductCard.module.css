@@ -1,0 +1,19 @@
+
+/* Enhancements for Collector Card items */
+.collectorCard {
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.collectorCard:hover {
+  transform: translateY(-5px) rotateY(var(--rotateY, 0deg)) rotateX(var(--rotateX, 0deg)) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 25px hsl(var(--primary) / 0.5);
+  z-index: 10;
+}
+
+/* Glow on hover */
+.collectorCard.group:hover {
+    outline: 2px solid hsl(var(--primary) / 0.5);
+    outline-offset: 2px;
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
+}

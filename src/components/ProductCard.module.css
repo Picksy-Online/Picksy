@@ -1,0 +1,45 @@
+/* Enhancements for Collector Card items */
+.collectorCard {
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.collectorCard:hover {
+  transform: translateY(-5px) rotateY(var(--rotateY, 0deg)) rotateX(var(--rotateX, 0deg)) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px rgba(92, 95, 150, 0.4);
+  z-index: 10;
+}
+
+/* Holographic shine effect */
+.holoShine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 80%
+  );
+  background-size: 200% 200%;
+  background-position: 200% 0;
+  transition: background-position 0.8s ease;
+  opacity: 0;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+}
+
+.collectorCard:hover .holoShine {
+  background-position: -100% 0;
+  opacity: 1;
+  transition-duration: 1.2s;
+}
+
+/* Glow on hover */
+.collectorCard.group:hover {
+    outline: 2px solid hsl(var(--primary) / 0.5);
+    outline-offset: 2px;
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
+}

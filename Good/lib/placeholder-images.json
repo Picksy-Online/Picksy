@@ -1,0 +1,82 @@
+{
+  "placeholderImages": [
+    {
+      "id": "prod_1",
+      "description": "A stylish vintage leather jacket.",
+      "imageUrl": "https://images.unsplash.com/photo-1623854156816-4c4fc355ffc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsZWF0aGVyJTIwamFja2V0fGVufDB8fHx8MTc2MDgzNDYyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "leather jacket"
+    },
+    {
+      "id": "prod_2",
+      "description": "A handmade ceramic mug with a unique glaze.",
+      "imageUrl": "https://images.unsplash.com/photo-1495100497150-fe209c585f50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjZXJhbWljJTIwbXVnfGVufDB8fHx8MTc2MDc0Mzc0OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ceramic mug"
+    },
+    {
+      "id": "prod_3",
+      "description": "A large abstract canvas art piece with vibrant colors.",
+      "imageUrl": "https://images.unsplash.com/photo-1622542796254-5b9c46ab0d2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhYnN0cmFjdCUyMGFydHxlbnwwfHx8fDE3NjA4MjcyOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract art"
+    },
+    {
+      "id": "prod_4",
+      "description": "A minimalist wall clock with a wooden frame.",
+      "imageUrl": "https://images.unsplash.com/photo-1530049080396-450947c04fcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3YWxsJTIwY2xvY2t8ZW58MHx8fHwxNzYwNzc4OTU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wall clock"
+    },
+    {
+      "id": "prod_5",
+      "description": "An artisanal scented candle in a glass jar.",
+      "imageUrl": "https://images.unsplash.com/photo-1570823635306-250abb06d4b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2NlbnRlZCUyMGNhbmRsZXxlbnwwfHx8fDE3NjA4MjkwOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "scented candle"
+    },
+    {
+      "id": "prod_6",
+      "description": "A set of handcrafted silver rings.",
+      "imageUrl": "https://images.unsplash.com/photo-1590703160323-ac5d3fc14089?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzaWx2ZXIlMjByaW5nc3xlbnwwfHx8fDE3NjA4Mzk3MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "silver rings"
+    },
+    {
+      "id": "prod_7",
+      "description": "A modern wooden desk lamp.",
+      "imageUrl": "https://images.unsplash.com/photo-1510074468346-504b4d8a8630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkZXNrJTIwbGFtcHxlbnwwfHx8fDE3NjA4MjAxNjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "desk lamp"
+    },
+    {
+      "id": "prod_8",
+      "description": "A handwoven wool blanket.",
+      "imageUrl": "https://images.unsplash.com/photo-1675273316420-c0275064a1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b29sJTIwYmxhbmtldHxlbnwwfHx8fDE3NjA4Mzk3MTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wool blanket"
+    },
+    {
+      "id": "prod_9",
+      "description": "A vintage-style record player.",
+      "imageUrl": "https://images.unsplash.com/photo-1616714109948-c74fe5029a4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZWNvcmQlMjBwbGF5ZXJ8ZW58MHx8fHwxNzYwNzMyMDg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "record player"
+    },
+    {
+      "id": "prod_10",
+      "description": "A gourmet coffee bean selection.",
+      "imageUrl": "https://images.unsplash.com/photo-1442550528053-c431ecb55509?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjb2ZmZWUlMjBiZWFuc3xlbnwwfHx8fDE3NjA4MzMwMTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coffee beans"
+    },
+    {
+      "id": "user_1_avatar",
+      "description": "Avatar for seller Elena.",
+      "imageUrl": "https://images.unsplash.com/photo-1592621385612-4d7129426394?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MDgzNjQ2Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "user_2_avatar",
+      "description": "Avatar for seller Marcus.",
+      "imageUrl": "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzYwODM0ODE1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "user_3_avatar",
+      "description": "Avatar for seller Anya.",
+      "imageUrl": "https://images.unsplash.com/photo-1484863137850-59afcfe05386?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2MDczMTI2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person smiling"
+    }
+  ]
+}
