@@ -114,7 +114,7 @@ export function CollectorCardsSidebar() {
       <SidebarHeader className="h-16 border-b flex items-center justify-center">
         <Logo />
       </SidebarHeader>
-      <SidebarContent className="p-2">
+      <SidebarContent className="p-2 pt-10">
         <SidebarNavigation />
       </SidebarContent>
     </Sidebar>

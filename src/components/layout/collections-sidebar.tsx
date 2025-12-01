@@ -21,6 +21,7 @@ import {
     Tag,
     Users,
 } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const navItems = [
     { href: "/", icon: Home, label: "Home" },
@@ -60,8 +61,6 @@ function SidebarNavigation() {
     );
 }
 
-import { Logo } from "@/components/logo";
-
 export function CollectionsSidebar() {
     const { setOpen } = useSidebar();
 
@@ -76,7 +75,7 @@ export function CollectionsSidebar() {
             <SidebarHeader className="h-16 border-b flex items-center justify-center">
                 <Logo />
             </SidebarHeader>
-            <SidebarContent className="p-2">
+            <SidebarContent className="p-2 pt-10">
                 <SidebarNavigation />
             </SidebarContent>
         </Sidebar>
