@@ -26,7 +26,7 @@ export default function HomePage() {
           <h2 className="text-2xl md:text-3xl font-headline font-bold mb-4 text-foreground">
             New & Trending
           </h2>
-          <ProductsGrid />
+          <ProductsGrid limit={20} />
         </section>
 
         <Testimonials />

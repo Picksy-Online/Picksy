@@ -11,7 +11,11 @@ import { getProducts } from '@/services/product-service';
 
 const BATCH_SIZE = 14;
 
-export default function ProductGrid() {
+interface ProductGridProps {
+  limit?: number;
+}
+
+export default function ProductGrid({ limit = BATCH_SIZE }: ProductGridProps) {
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(0);
@@ -27,10 +31,10 @@ export default function ProductGrid() {
     const { products: newProducts, hasMore: newHasMore } =
       await getProducts({
         page: nextPage.toString(),
-        limit: BATCH_SIZE.toString(),
+        limit: limit.toString(),
         category: '!Collector Cards' // Exclude collector cards from this grid
       });
-    
+
     setProducts(prev => [...prev, ...newProducts]);
     setPage(nextPage);
     setHasMore(newHasMore);
@@ -50,7 +54,7 @@ export default function ProductGrid() {
     },
     [loading, hasMore, loadMoreProducts]
   );
-  
+
   useEffect(() => {
     // initial load
     loadMoreProducts();

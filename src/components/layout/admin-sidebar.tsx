@@ -44,24 +44,19 @@ export function AdminSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <div className="flex items-center justify-between">
-          <Link href="/admin/dashboard" className="inline-block">
-            <Logo className="w-auto h-7" />
-          </Link>
-          <SidebarTrigger />
-        </div>
+      <SidebarHeader className="h-24 border-b flex items-center justify-center pt-5">
+        <Logo src="/picksy-logo-sidebar.png" className="w-auto h-12" />
       </SidebarHeader>
       <SidebarContent className="p-2 pt-8">
         <SidebarMenu>
-           <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="View Site">
-                <Link href="/">
-                  <Home />
-                  <span>View Site</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip="View Site">
+              <Link href="/">
+                <Home />
+                <span>View Site</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
         <SidebarSeparator />
         <SidebarMenu>
