@@ -25,9 +25,13 @@
     ];
     workspace = {
       onCreate = {
+        npm-install = "npm install";
         default.openFiles = [
           "src/app/page.tsx"
         ];
+      };
+      onStart = {
+        npm-install = "npm install";
       };
     };
     # Enable previews and customize configuration
