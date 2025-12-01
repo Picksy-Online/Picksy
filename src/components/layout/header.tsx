@@ -23,7 +23,7 @@ export function Header() {
       >
         <div className="flex items-center">
           <Link href="/">
-            <Logo className="w-auto h-20" />
+            <Logo className="w-[280px] h-[80px]" />
           </Link>
         </div>
 
