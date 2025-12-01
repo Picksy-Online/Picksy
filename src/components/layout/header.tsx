@@ -21,29 +21,15 @@ export function Header() {
           "grid grid-cols-[auto,1fr] gap-4 px-4 py-3 md:px-6"
         )}
       >
-        {/* This div acts as a spacer, taking up the width of the sidebar */}
-        <div className={cn(
-          "w-0 md:w-[var(--sidebar-width-icon)] lg:group-data-[state=expanded]:w-[var(--sidebar-width)] transition-all duration-200"
-        )}></div>
+        <div className="flex items-center">
+          <Link href="/">
+            <Logo />
+          </Link>
+        </div>
 
         {/* This div contains the actual header content */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center h-16 justify-between">
-            <div className="flex items-center md:hidden">
-              <Link href="/">
-                <Logo className="w-24 h-8" />
-              </Link>
-            </div>
-            <div className="hidden md:flex items-center">
-              {/* Desktop Logo if sidebar is not present/visible, or just always show it here if sidebar is collapsed? 
-                   Actually, the sidebar spacer logic suggests the logo is in the sidebar. 
-                   But user says "I dont see it". 
-                   Let's add it here for now, maybe hidden on lg if sidebar is open? 
-                   For now, let's just make sure it shows up. */}
-              <Link href="/" className="lg:hidden">
-                <Logo className="w-28 h-9" />
-              </Link>
-            </div>
+          <div className="flex items-center h-16 justify-end">
             <div className="flex items-center gap-6 md:gap-10">
               <div className="hidden md:block"><SearchBar /></div>
               <MainNav />
