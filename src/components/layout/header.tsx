@@ -23,13 +23,13 @@ export function Header() {
       >
         <div className="flex items-center">
           <Link href="/">
-            <Logo />
+            <Logo className="w-[20rem] h-[7rem]" />
           </Link>
         </div>
 
         {/* This div contains the actual header content */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center h-16 justify-end">
+        <div className="flex flex-col gap-4 justify-center">
+          <div className="flex items-center justify-end min-h-16">
             <div className="flex items-center gap-6 md:gap-10">
               <div className="hidden md:block"><SearchBar /></div>
               <MainNav />
