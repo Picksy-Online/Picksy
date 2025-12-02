@@ -75,8 +75,8 @@ export function DetailedSearch({
     return (
         <div className="w-full space-y-4 bg-card p-6 rounded-xl border shadow-sm">
             <div className="flex flex-col md:flex-row gap-4">
-                {/* Main Search Input */}
-                <div className="relative flex-1">
+                {/* Main Search Input - REMOVED */}
+                {/* <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder="Search for anything..."
@@ -93,7 +93,7 @@ export function DetailedSearch({
                             <X className="h-4 w-4" />
                         </button>
                     )}
-                </div>
+                </div> */}
 
                 {/* Desktop Filters */}
                 <div className="hidden md:flex gap-4">

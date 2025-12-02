@@ -71,7 +71,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+      <body className="font-body antialiased overflow-x-hidden" suppressHydrationWarning>
         <FirebaseClientProvider>
           <CartProvider>
             <ViewedProductsProvider>

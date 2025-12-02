@@ -129,7 +129,7 @@ export default function BrowsePage() {
   return (
     <div className="pt-5 pb-12 p-5">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold font-headline">Browse</h1>
+        <h1 className="text-3xl font-bold font-headline">All</h1>
         {user && (
           <Button asChild>
             <Link href="/dashboard/sales">
@@ -159,7 +159,7 @@ export default function BrowsePage() {
         />
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 mt-8">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 mt-8">
         {sortedAndFilteredProducts.length > 0 ? (
           sortedAndFilteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} forceSquare />

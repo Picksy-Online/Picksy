@@ -26,6 +26,7 @@ import {
 import { checkCardCondition, CheckCardConditionOutput } from '@/ai/flows/check-card-condition';
 import { ImageCropper } from '@/components/image-cropper';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 export default function SellCardsPage() {
     const router = useRouter();
@@ -74,6 +75,7 @@ export default function SellCardsPage() {
     const [analysis, setAnalysis] = useState<CheckCardConditionOutput | null>(null);
 
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+    const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -114,6 +116,10 @@ export default function SellCardsPage() {
 
     const toggleCamera = () => {
         setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+    };
+
+    const toggleOrientation = () => {
+        setOrientation(prev => prev === 'portrait' ? 'landscape' : 'portrait');
     };
 
     const captureImage = (side: 'front' | 'back' | 'additional') => {
@@ -286,16 +292,7 @@ export default function SellCardsPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {/* Camera View */}
-                            <div className="relative w-full max-w-[300px] mx-auto overflow-hidden border-2 border-dashed rounded-lg aspect-[65/95] border-primary/50 flex items-center justify-center bg-muted/20">
-                                <video
-                                    ref={videoRef}
-                                    className="w-full h-full object-cover"
-                                    autoPlay
-                                    muted
-                                    playsInline
-                                />
-                            </div>
+
 
                             {hasCameraPermission === false && (
                                 <Alert variant="destructive" className="mt-4">
@@ -318,23 +315,40 @@ export default function SellCardsPage() {
 
                                 {/* Camera Guide Overlay */}
                                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                                    <div className="w-[80%] h-[80%] border-2 border-dashed border-white/50 rounded-lg flex items-center justify-center">
+                                    <div className={cn(
+                                        "border-2 border-dashed border-white/50 rounded-lg flex items-center justify-center transition-all duration-300",
+                                        orientation === 'portrait' ? "w-[60%] h-[80%]" : "w-[80%] h-[60%]"
+                                    )}>
                                         <p className="text-white/70 text-sm font-medium bg-black/50 px-2 py-1 rounded">
                                             Align item within frame
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Flip Camera Button */}
-                                <Button
-                                    variant="secondary"
-                                    size="icon"
-                                    className="absolute top-4 right-4 z-10 rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
-                                    onClick={toggleCamera}
-                                >
-                                    <RefreshCcw className="h-5 w-5" />
-                                    <span className="sr-only">Flip Camera</span>
-                                </Button>
+                                {/* Controls Container */}
+                                <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+                                    {/* Flip Camera Button */}
+                                    <Button
+                                        variant="secondary"
+                                        size="icon"
+                                        className="rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
+                                        onClick={toggleCamera}
+                                    >
+                                        <RefreshCcw className="h-5 w-5" />
+                                        <span className="sr-only">Flip Camera</span>
+                                    </Button>
+
+                                    {/* Orientation Toggle */}
+                                    <Button
+                                        variant="secondary"
+                                        size="icon"
+                                        className="rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
+                                        onClick={toggleOrientation}
+                                    >
+                                        <div className={cn("border-2 border-white w-3 h-5 rounded-[2px] transition-transform", orientation === 'landscape' && "rotate-90")} />
+                                        <span className="sr-only">Toggle Orientation</span>
+                                    </Button>
+                                </div>
                             </div>
 
                             {/* Capture Buttons */}
@@ -611,6 +625,6 @@ export default function SellCardsPage() {
                     </Card>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
