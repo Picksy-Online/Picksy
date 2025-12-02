@@ -20,6 +20,8 @@ import {
     Loader2,
     RefreshCcw,
     Crop,
+    Plus,
+    X,
 } from 'lucide-react';
 import { checkCardCondition, CheckCardConditionOutput } from '@/ai/flows/check-card-condition';
 import { findSimilarProducts, FindSimilarProductsOutput } from '@/ai/flows/visual-search';
