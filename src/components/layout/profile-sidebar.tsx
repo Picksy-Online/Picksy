@@ -48,7 +48,7 @@ export function ProfileSidebar() {
         },
         {
             title: "Project To-Do",
-            url: "/settings/todo",
+            url: "/profile/todo",
             icon: ListTodo,
         },
     ];
