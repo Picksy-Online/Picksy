@@ -20,7 +20,8 @@ import {
     Crop,
     AlertTriangle,
     X,
-    Plus
+    Plus,
+    RefreshCcw,
 } from 'lucide-react';
 import { checkCardCondition, CheckCardConditionOutput } from '@/ai/flows/check-card-condition';
 import { ImageCropper } from '@/components/image-cropper';
@@ -72,6 +73,8 @@ export default function SellCardsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [analysis, setAnalysis] = useState<CheckCardConditionOutput | null>(null);
 
+    const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -82,7 +85,15 @@ export default function SellCardsPage() {
                 return;
             }
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                // Stop any existing tracks
+                if (videoRef.current && videoRef.current.srcObject) {
+                    const stream = videoRef.current.srcObject as MediaStream;
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facingMode }
+                });
                 setHasCameraPermission(true);
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
@@ -99,7 +110,11 @@ export default function SellCardsPage() {
             }
         };
         getCameraPermission();
-    }, [toast]);
+    }, [toast, facingMode]);
+
+    const toggleCamera = () => {
+        setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+    };
 
     const captureImage = (side: 'front' | 'back' | 'additional') => {
         setActiveCaptureSide(side);
@@ -290,6 +305,37 @@ export default function SellCardsPage() {
                                     </AlertDescription>
                                 </Alert>
                             )}
+
+                            {/* Camera View */}
+                            <div className="relative aspect-video bg-black rounded-lg overflow-hidden mb-4">
+                                <video
+                                    ref={videoRef}
+                                    autoPlay
+                                    playsInline
+                                    muted
+                                    className="w-full h-full object-cover"
+                                />
+
+                                {/* Camera Guide Overlay */}
+                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                                    <div className="w-[80%] h-[80%] border-2 border-dashed border-white/50 rounded-lg flex items-center justify-center">
+                                        <p className="text-white/70 text-sm font-medium bg-black/50 px-2 py-1 rounded">
+                                            Align item within frame
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Flip Camera Button */}
+                                <Button
+                                    variant="secondary"
+                                    size="icon"
+                                    className="absolute top-4 right-4 z-10 rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
+                                    onClick={toggleCamera}
+                                >
+                                    <RefreshCcw className="h-5 w-5" />
+                                    <span className="sr-only">Flip Camera</span>
+                                </Button>
+                            </div>
 
                             {/* Capture Buttons */}
                             <div className="grid grid-cols-2 gap-4">

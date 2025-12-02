@@ -21,7 +21,7 @@ import { getAuth } from "firebase/auth";
 export function UserNav() {
   const { user, isUserLoading } = useFirebase();
   const auth = getAuth();
-  
+
   if (isUserLoading) {
     return <Loader2 className="h-6 w-6 animate-spin" />;
   }
@@ -32,7 +32,7 @@ export function UserNav() {
         <Button variant="ghost" asChild>
           <Link href="/login">Log In</Link>
         </Button>
-        <Button asChild>
+        <Button asChild className="mr-2">
           <Link href="/signup">Sign Up</Link>
         </Button>
       </div>
@@ -80,21 +80,21 @@ export function UserNav() {
               <span>Messages</span>
             </Link>
           </DropdownMenuItem>
-           {isSuperUser ? (
-             <DropdownMenuItem asChild>
-                <Link href="/admin/site-content">
-                  <Palette className="w-4 h-4 mr-2" />
-                  <span>Site Content</span>
-                </Link>
-              </DropdownMenuItem>
-           ) : (
+          {isSuperUser ? (
+            <DropdownMenuItem asChild>
+              <Link href="/admin/site-content">
+                <Palette className="w-4 h-4 mr-2" />
+                <span>Site Content</span>
+              </Link>
+            </DropdownMenuItem>
+          ) : (
             <DropdownMenuItem asChild>
               <Link href="/admin">
                 <Shield className="w-4 h-4 mr-2" />
                 <span>Admin</span>
               </Link>
             </DropdownMenuItem>
-           )}
+          )}
           <DropdownMenuItem asChild>
             <Link href="/profile/settings">
               <Settings className="w-4 h-4 mr-2" />

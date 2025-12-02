@@ -7,7 +7,7 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { UserNav } from "@/components/layout/user-nav";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, ArrowUpDown } from "lucide-react";
 import { SearchBar } from "@/components/layout/search-bar";
 import { cn } from "@/lib/utils";
 
@@ -16,12 +16,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-card">
-      <div className="flex flex-col md:flex-row items-center px-4 py-2 gap-4 w-full">
+      <div className="flex flex-col md:flex-row items-center px-2 md:px-4 py-2 gap-4 w-full">
 
         {/* Mobile Header Row */}
         <div className="flex items-center justify-between w-full md:hidden">
           <Link href="/browse">
-            <Logo className="w-[200px] h-[60px]" />
+            <Logo className="w-[180px] h-[54px]" />
           </Link>
           <div className="flex items-center gap-2">
             <Button
@@ -51,8 +51,12 @@ export function Header() {
         </div>
 
         {/* Search Bar - Dynamic width */}
-        <div className="w-full md:w-auto md:flex-[2] min-w-[15ch]">
+        <div className="w-full md:w-auto md:flex-[2] min-w-[15ch] flex items-center gap-2">
           <SearchBar className="w-full" />
+          <Button variant="outline" size="icon" className="md:hidden shrink-0">
+            <ArrowUpDown className="h-4 w-4" />
+            <span className="sr-only">Sort</span>
+          </Button>
         </div>
 
         {/* Desktop Nav */}
