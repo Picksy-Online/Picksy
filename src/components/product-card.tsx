@@ -121,7 +121,6 @@ export function ProductCard({ product, forceSquare = false }: ProductCardProps) 
               src={product.imageUrls[activeImageIndex] || product.imageUrls[0]}
               alt={product.name}
               fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
               className={cn(
                 "object-cover w-full h-full transition-all duration-300 rounded-lg group-hover:scale-105",
                 product.category === 'Collector Coins' && "rounded-full"
