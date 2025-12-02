@@ -4,28 +4,12 @@
 import { products as allProducts, users } from "@/lib/data";
 import { ProductCard } from "@/components/product-card";
 import { useState, useMemo } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { Product, User } from "@/lib/types";
 import Link from "next/link";
-import { PlusCircle, ArrowUpDown, UserMinus, UserPlus, Users } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { CollectorCardsFilterTrigger } from "@/components/filters/collector-cards-filter-trigger";
 
 export default function CollectorCardsPage() {
   const { user } = useAuth() as { user: User | null };
@@ -104,64 +88,18 @@ export default function CollectorCardsPage() {
         <h1 className="text-3xl font-bold font-headline whitespace-nowrap">Collector Cards</h1>
 
         <div className="flex flex-wrap items-center gap-2 justify-end w-full md:w-auto">
-          <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger id="sort-order" className="w-[40px] px-2 md:w-[180px] md:px-3">
-              <ArrowUpDown className="h-4 w-4 md:hidden mx-auto" />
-              <div className="hidden md:block">
-                <SelectValue placeholder="Sort by" />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="price-asc">Price: Low to High</SelectItem>
-              <SelectItem value="price-desc">Price: High to Low</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <div className="relative">
-            <Input
-              id="postcode"
-              placeholder="Postcode"
-              className="w-[80px] md:w-[120px]"
-              value={postcode}
-              onChange={(e) => setPostcode(e.target.value)}
-            />
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={() => setIsExclusionMode(!isExclusionMode)}
-            className="w-[40px] px-0 md:w-auto md:px-4 md:min-w-[140px]"
-          >
-            <span className="md:hidden">
-              {isExclusionMode ? <UserMinus className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-            </span>
-            <span className="hidden md:inline">
-              {isExclusionMode ? "Exclude Sellers" : "Include Sellers"}
-            </span>
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-[40px] px-0 md:w-auto md:px-4">
-                <Users className="h-4 w-4 md:hidden" />
-                <span className="hidden md:inline">Select Sellers</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Select Sellers</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {availableSellers.map((seller) => (
-                <DropdownMenuCheckboxItem
-                  key={seller.id}
-                  checked={selectedSellers.includes(seller.id)}
-                  onCheckedChange={() => handleSellerSelection(seller.id)}
-                  onSelect={(e) => e.preventDefault()}
-                >
-                  {seller.storeName}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Filter Trigger */}
+          <CollectorCardsFilterTrigger
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            postcode={postcode}
+            setPostcode={setPostcode}
+            isExclusionMode={isExclusionMode}
+            setIsExclusionMode={setIsExclusionMode}
+            selectedSellers={selectedSellers}
+            handleSellerSelection={handleSellerSelection}
+            availableSellers={availableSellers}
+          />
 
           {user && (
             <Button asChild className="shrink-0 w-[40px] px-0 md:w-auto md:px-4">

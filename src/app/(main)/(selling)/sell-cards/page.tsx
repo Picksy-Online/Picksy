@@ -317,7 +317,7 @@ export default function SellCardsPage() {
                                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                                     <div className={cn(
                                         "border-2 border-dashed border-white/50 rounded-lg flex items-center justify-center transition-all duration-300",
-                                        orientation === 'portrait' ? "w-[60%] h-[80%]" : "w-[80%] h-[60%]"
+                                        orientation === 'portrait' ? "aspect-[65/90] h-[80%]" : "aspect-[90/65] w-[80%]"
                                     )}>
                                         <p className="text-white/70 text-sm font-medium bg-black/50 px-2 py-1 rounded">
                                             Align item within frame

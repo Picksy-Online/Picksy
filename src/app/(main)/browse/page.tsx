@@ -3,39 +3,33 @@
 import { products as allProducts, users } from "@/lib/data";
 import { ProductCard } from "@/components/product-card";
 import { useState, useMemo } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { DetailedSearch } from "@/components/detailed-search";
-import type { Product, User } from "@/lib/types";
+import type { Product } from "@/lib/types";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { MobileFilterTrigger } from "@/components/filters/mobile-filter-trigger";
+import { DesktopFilterBar } from "@/components/filters/desktop-filter-bar";
+import { ActiveFilterBadges } from "@/components/filters/active-filter-badges";
+import { SearchFilters } from "@/components/filters/filter-types";
 
 export default function BrowsePage() {
   const { user } = useAuth();
-  const [sortOrder, setSortOrder] = useState<string>("newest");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState("all");
+
+  const [filters, setFilters] = useState<SearchFilters>({
+    query: "",
+    category: "all",
+    minPrice: 0,
+    maxPrice: 10000,
+    sort: "newest",
+  });
+
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [includedSellers, setIncludedSellers] = useState<string[]>([]);
   const [excludedSellers, setExcludedSellers] = useState<string[]>([]);
   const [postcode, setPostcode] = useState<string>("");
+
+  const categories = useMemo(() => Array.from(new Set(allProducts.map(p => p.category))), []);
 
   const sellerPostcodeMap = useMemo(() => {
     return users.reduce((acc, seller) => {
@@ -48,8 +42,8 @@ export default function BrowsePage() {
     let filteredProducts = allProducts.filter(p => !p.isPrivate);
 
     // Filter by search query
-    if (searchQuery) {
-      const lowerQuery = searchQuery.toLowerCase();
+    if (filters.query) {
+      const lowerQuery = filters.query.toLowerCase();
       filteredProducts = filteredProducts.filter(p =>
         p.name.toLowerCase().includes(lowerQuery) ||
         p.description.toLowerCase().includes(lowerQuery)
@@ -57,11 +51,11 @@ export default function BrowsePage() {
     }
 
     // Filter by category
-    if (category !== "all") {
-      filteredProducts = filteredProducts.filter(p => p.category === category);
+    if (filters.category !== "all") {
+      filteredProducts = filteredProducts.filter(p => p.category === filters.category);
     }
 
-    // Filter by price range
+    // Filter by price range (using slider value directly)
     filteredProducts = filteredProducts.filter(p =>
       p.price >= priceRange[0] && p.price <= priceRange[1]
     );
@@ -96,7 +90,7 @@ export default function BrowsePage() {
 
     // Sort products
     return filteredProducts.sort((a: Product, b: Product) => {
-      switch (sortOrder) {
+      switch (filters.sort) {
         case "price-asc":
           return a.price - b.price;
         case "price-desc":
@@ -108,54 +102,61 @@ export default function BrowsePage() {
           return 0; // Assuming default order is newest or random
       }
     });
-  }, [sortOrder, searchQuery, category, priceRange, includedSellers, excludedSellers, user, postcode, sellerPostcodeMap]);
+  }, [filters, priceRange, includedSellers, excludedSellers, user, postcode, sellerPostcodeMap]);
 
-  const handleSellerSelection = (
-    sellerId: string,
-    list: string[],
-    setList: React.Dispatch<React.SetStateAction<string[]>>
-  ) => {
-    const newList = list.includes(sellerId)
-      ? list.filter((id) => id !== sellerId)
-      : [...list, sellerId];
-    setList(newList);
+  const handleClearFilters = () => {
+    setFilters({
+      query: "",
+      category: "all",
+      minPrice: 0,
+      maxPrice: 10000,
+      sort: "newest",
+    });
+    setPriceRange([0, 10000]);
   };
-
-  const availableSellers = useMemo(() => {
-    const blockedIds = user?.blockedSellerIds || [];
-    return users.filter(seller => !blockedIds.includes(seller.id));
-  }, [user]);
 
   return (
     <div className="pt-5 pb-12 p-5">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold font-headline">All</h1>
-        {user && (
-          <Button asChild>
-            <Link href="/dashboard/sales">
-              <PlusCircle className="w-4 h-4 mr-2" />
-              List Item
-            </Link>
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Mobile Filter Trigger - Icon next to List Item */}
+          <div className="md:hidden">
+            <MobileFilterTrigger
+              filters={filters}
+              setFilters={setFilters}
+              categories={categories}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              onClear={handleClearFilters}
+            />
+          </div>
+
+          {user && (
+            <Button asChild>
+              <Link href="/dashboard/sales">
+                <PlusCircle className="w-4 h-4 mr-2" />
+                List Item
+              </Link>
+            </Button>
+          )}
+        </div>
       </div>
 
-      <div className="mb-8">
-        <DetailedSearch
-          onSearch={(filters) => {
-            setSearchQuery(filters.query);
-            setSortOrder(filters.sort);
-            setPriceRange([filters.minPrice, filters.maxPrice]);
-            setCategory(filters.category);
-          }}
-          categories={Array.from(new Set(allProducts.map(p => p.category)))}
-          initialFilters={{
-            query: searchQuery,
-            sort: sortOrder,
-            minPrice: priceRange[0],
-            maxPrice: priceRange[1],
-            category: category,
-          }}
+      <div className="mb-8 space-y-4">
+        {/* Desktop Filters */}
+        <DesktopFilterBar
+          filters={filters}
+          setFilters={setFilters}
+          categories={categories}
+        />
+
+        {/* Active Filters */}
+        <ActiveFilterBadges
+          filters={filters}
+          setFilters={setFilters}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
         />
       </div>
 

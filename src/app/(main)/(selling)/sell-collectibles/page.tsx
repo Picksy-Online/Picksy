@@ -67,7 +67,6 @@ export default function SellCollectiblesPage() {
     const [analysis, setAnalysis] = useState<CheckCardConditionOutput | null>(null);
 
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-    const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -108,10 +107,6 @@ export default function SellCollectiblesPage() {
 
     const toggleCamera = () => {
         setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
-    };
-
-    const toggleOrientation = () => {
-        setOrientation(prev => prev === 'portrait' ? 'landscape' : 'portrait');
     };
 
     const captureImage = () => {
@@ -287,7 +282,7 @@ export default function SellCollectiblesPage() {
                                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                                     <div className={cn(
                                         "border-2 border-dashed border-white/50 rounded-lg flex items-center justify-center transition-all duration-300",
-                                        orientation === 'portrait' ? "w-[60%] h-[80%]" : "w-[80%] h-[60%]"
+                                        "w-[60%] h-[80%]"
                                     )}>
                                         <p className="text-white/70 text-sm font-medium bg-black/50 px-2 py-1 rounded">
                                             Align item within frame
@@ -306,17 +301,6 @@ export default function SellCollectiblesPage() {
                                     >
                                         <RefreshCcw className="h-5 w-5" />
                                         <span className="sr-only">Flip Camera</span>
-                                    </Button>
-
-                                    {/* Orientation Toggle */}
-                                    <Button
-                                        variant="secondary"
-                                        size="icon"
-                                        className="rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
-                                        onClick={toggleOrientation}
-                                    >
-                                        <div className={cn("border-2 border-white w-3 h-5 rounded-[2px] transition-transform", orientation === 'landscape' && "rotate-90")} />
-                                        <span className="sr-only">Toggle Orientation</span>
                                     </Button>
                                 </div>
                             </div>
