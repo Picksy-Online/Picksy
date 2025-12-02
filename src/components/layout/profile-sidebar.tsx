@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from '@/components/ui/sidebar';
-import { User, Package, Heart, Settings, LogOut, CreditCard } from 'lucide-react';
+import { User, Package, Heart, Settings, LogOut, CreditCard, ListTodo } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/logo';
@@ -45,6 +45,11 @@ export function ProfileSidebar() {
             title: "Settings",
             url: "/profile/settings",
             icon: Settings,
+        },
+        {
+            title: "Project To-Do",
+            url: "/settings/todo",
+            icon: ListTodo,
         },
     ];
 

@@ -109,6 +109,23 @@ export default function SellCollectiblesPage() {
         setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
     };
 
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                if (result) {
+                    setUncroppedImageSrc(result);
+                    setIsCropperOpen(true);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        // Reset input value to allow selecting same file again
+        event.target.value = '';
+    };
+
     const captureImage = () => {
         if (images.length >= 5) {
             toast({
@@ -231,7 +248,7 @@ export default function SellCollectiblesPage() {
     };
 
     return (
-        <div className="container py-8 space-y-8">
+        <div className="container px-4 py-8 space-y-8 md:px-8">
             <div className="flex flex-col items-center space-y-4 text-center">
                 <h1 className="text-3xl font-bold font-headline">Sell Your Collectible</h1>
                 <Tabs defaultValue="collectible" onValueChange={handleTypeChange} className="w-[400px]">
@@ -256,7 +273,7 @@ export default function SellCollectiblesPage() {
                 initialAspectRatio={4 / 3}
             />
 
-            <div className="grid gap-8 lg:grid-cols-2">
+            <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
                 {/* Image Capture Section */}
                 <div className="space-y-6">
                     <Card>
@@ -269,7 +286,7 @@ export default function SellCollectiblesPage() {
                         <CardContent className="space-y-4">
                             {/* Camera View */}
                             {/* Camera View */}
-                            <div className="relative w-full max-w-[400px] mx-auto overflow-hidden border-2 border-dashed rounded-lg aspect-[4/3] border-primary/50 flex items-center justify-center bg-muted/20">
+                            <div className="relative w-full mx-auto overflow-hidden border-2 border-dashed rounded-lg h-[600px] border-primary/50 flex items-center justify-center bg-muted/20">
                                 <video
                                     ref={videoRef}
                                     className="w-full h-full object-cover"
@@ -314,9 +331,23 @@ export default function SellCollectiblesPage() {
                                 </Alert>
                             )}
 
-                            <Button onClick={captureImage} className="w-full" disabled={!hasCameraPermission || images.length >= 5}>
-                                <Camera className="w-4 h-4 mr-2" /> Capture Image
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button onClick={captureImage} className="flex-1" disabled={!hasCameraPermission || images.length >= 5}>
+                                    <Camera className="w-4 h-4 mr-2" /> Capture Image
+                                </Button>
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/jpg"
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        onChange={handleFileUpload}
+                                        disabled={images.length >= 5}
+                                    />
+                                    <Button variant="outline" className="w-full" disabled={images.length >= 5}>
+                                        <Upload className="w-4 h-4 mr-2" /> Upload
+                                    </Button>
+                                </div>
+                            </div>
 
                             {/* Image Gallery */}
                             {images.length > 0 && (

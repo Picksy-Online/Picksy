@@ -122,6 +122,23 @@ export default function SellCardsPage() {
         setOrientation(prev => prev === 'portrait' ? 'landscape' : 'portrait');
     };
 
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                if (result) {
+                    setUncroppedImageSrc(result);
+                    setIsCropperOpen(true);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        // Reset input value to allow selecting same file again
+        event.target.value = '';
+    };
+
     const captureImage = (side: 'front' | 'back' | 'additional') => {
         setActiveCaptureSide(side);
         if (videoRef.current && canvasRef.current) {
@@ -256,7 +273,7 @@ export default function SellCardsPage() {
     };
 
     return (
-        <div className="container py-8 space-y-8">
+        <div className="container px-4 py-8 space-y-8 md:px-8">
             <div className="flex flex-col items-center space-y-4 text-center">
                 <h1 className="text-3xl font-bold font-headline">Sell Your Collector Card</h1>
                 <Tabs defaultValue="card" onValueChange={handleTypeChange} className="w-[400px]">
@@ -281,7 +298,7 @@ export default function SellCardsPage() {
                 initialAspectRatio={65 / 95}
             />
 
-            <div className="grid gap-8 lg:grid-cols-2">
+            <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
                 {/* Image Capture Section */}
                 <div className="space-y-6">
                     <Card>
@@ -304,7 +321,7 @@ export default function SellCardsPage() {
                             )}
 
                             {/* Camera View */}
-                            <div className="relative aspect-video bg-black rounded-lg overflow-hidden mb-4">
+                            <div className="relative h-[600px] bg-black rounded-lg overflow-hidden mb-4">
                                 <video
                                     ref={videoRef}
                                     autoPlay
@@ -368,9 +385,25 @@ export default function SellCardsPage() {
                                             </Button>
                                         </div>
                                     ) : (
-                                        <Button onClick={() => captureImage('front')} className="w-full" variant="outline" disabled={!hasCameraPermission}>
-                                            Capture Front
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button onClick={() => captureImage('front')} className="flex-1" variant="outline" disabled={!hasCameraPermission}>
+                                                Capture Front
+                                            </Button>
+                                            <div className="relative">
+                                                <input
+                                                    type="file"
+                                                    accept="image/jpeg,image/png,image/jpg"
+                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                    onChange={(e) => {
+                                                        setActiveCaptureSide('front');
+                                                        handleFileUpload(e);
+                                                    }}
+                                                />
+                                                <Button variant="outline" size="icon">
+                                                    <Upload className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                                 <div className="space-y-2">
@@ -388,9 +421,25 @@ export default function SellCardsPage() {
                                             </Button>
                                         </div>
                                     ) : (
-                                        <Button onClick={() => captureImage('back')} className="w-full" variant="outline" disabled={!hasCameraPermission}>
-                                            Capture Back
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button onClick={() => captureImage('back')} className="flex-1" variant="outline" disabled={!hasCameraPermission}>
+                                                Capture Back
+                                            </Button>
+                                            <div className="relative">
+                                                <input
+                                                    type="file"
+                                                    accept="image/jpeg,image/png,image/jpg"
+                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                    onChange={(e) => {
+                                                        setActiveCaptureSide('back');
+                                                        handleFileUpload(e);
+                                                    }}
+                                                />
+                                                <Button variant="outline" size="icon">
+                                                    <Upload className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -407,6 +456,25 @@ export default function SellCardsPage() {
                                     >
                                         <Plus className="w-4 h-4 mr-1" /> Add
                                     </Button>
+                                    <div className="relative ml-2">
+                                        <input
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/jpg"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            onChange={(e) => {
+                                                setActiveCaptureSide('additional');
+                                                handleFileUpload(e);
+                                            }}
+                                            disabled={additionalImages.length >= 3 || ((frontImageSrc ? 1 : 0) + (backImageSrc ? 1 : 0) + additionalImages.length >= 5)}
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            disabled={additionalImages.length >= 3 || ((frontImageSrc ? 1 : 0) + (backImageSrc ? 1 : 0) + additionalImages.length >= 5)}
+                                        >
+                                            <Upload className="w-4 h-4" />
+                                        </Button>
+                                    </div>
                                 </div>
                                 {additionalImages.length > 0 && (
                                     <div className="grid grid-cols-3 gap-2">

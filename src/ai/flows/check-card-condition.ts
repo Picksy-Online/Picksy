@@ -51,8 +51,7 @@ const prompt = ai.definePrompt({
   output: { schema: CheckCardConditionOutputSchema },
   prompt: `You are a professional trading card grader. Analyze the provided images (front and back) of a trading card.
 
-First, assess the image quality. The images MUST be taken on a background that shows the full details of the card, including all edges and corners. The lighting must be sufficient.
-If the images are blurry, cut off, or the background obscures the edges, set "isImageQualitySufficient" to false and provide specific "qualityFeedback" asking for a better picture.
+First, assess the image quality. The images might be cropped tightly to the card. This is ACCEPTABLE. Only reject if the card is significantly blurry or major parts are missing. Do not reject simply because there is no background visible.
 
 If the quality is sufficient, set "isImageQualitySufficient" to true and proceed to assess the condition based on: centering, corners, edges, and surface (front and back). Provide an estimated overall grade.
 

@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,6 +22,7 @@ type ProductCardProps = {
 import { ProductImageLightbox } from "@/components/product-image-lightbox";
 
 export function ProductCard({ product, forceSquare = false }: ProductCardProps) {
+  const router = useRouter();
   const isCollectorCard = product.category === 'Collector Cards';
   const isCollectorCoin = product.category === 'Collector Coins';
   const { viewedProductIds } = useViewedProducts();
@@ -109,6 +111,17 @@ export function ProductCard({ product, forceSquare = false }: ProductCardProps) 
               <span className="sr-only">Viewed</span>
             </div>
           )}
+
+          {/* Direct Link Hitbox */}
+          <div
+            className="absolute top-0 left-0 w-1/2 h-1/2 z-30 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/product/${product.id}`);
+            }}
+            title="Go to Product Page"
+          />
+
           <div
             className={cn(
               "relative w-full",
