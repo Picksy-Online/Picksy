@@ -11,15 +11,17 @@ export default function SellersPage() {
     const sellers = users;
 
     return (
-        <div className="container py-8">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold font-headline">Our Sellers</h1>
-                <p className="text-muted-foreground mt-2">
-                    Discover unique products from our community of trusted sellers.
-                </p>
+        <div className="pt-5 pb-12 p-5">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold font-headline">Our Sellers</h1>
+                    <p className="mt-2 text-muted-foreground">
+                        Discover unique products from our community of trusted sellers.
+                    </p>
+                </div>
             </div>
 
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-0 mt-8">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 mt-8">
                 {sellers.map((seller) => (
                     <Link key={seller.id} href={`/store/${seller.id}`} className="group block h-full">
                         <Card className="h-full border-0 rounded-none shadow-none hover:z-10 hover:shadow-lg transition-all duration-200 relative">

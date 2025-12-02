@@ -54,11 +54,11 @@ export default function FriendsPage() {
                   <TableCell>
                     <div className="flex items-center gap-4">
                       <Avatar>
-                        <AvatarImage src={user.avatarUrl} alt={user.name} />
-                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={user.avatarUrl} alt={user.name || 'User'} />
+                        <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">{user.name}</p>
+                        <p className="font-medium">{user.name || 'Unknown User'}</p>
                         <p className="text-sm text-muted-foreground">{user.storeName}</p>
                       </div>
                     </div>
@@ -69,7 +69,7 @@ export default function FriendsPage() {
                   </TableCell>
                 </TableRow>
               ))}
-               {friendRequests.length === 0 && (
+              {friendRequests.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={2} className="text-center">No pending friend requests.</TableCell>
                 </TableRow>
@@ -100,12 +100,12 @@ export default function FriendsPage() {
                   <TableCell>
                     <div className="flex items-center gap-4">
                       <Avatar>
-                        <AvatarImage src={user.avatarUrl} alt={user.name} />
-                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={user.avatarUrl} alt={user.name || 'User'} />
+                        <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">{user.name}</p>
-                         <p className="text-sm text-muted-foreground">{user.storeName}</p>
+                        <p className="font-medium">{user.name || 'Unknown User'}</p>
+                        <p className="text-sm text-muted-foreground">{user.storeName}</p>
                       </div>
                     </div>
                   </TableCell>
@@ -114,7 +114,7 @@ export default function FriendsPage() {
                   </TableCell>
                 </TableRow>
               ))}
-               {friends.length === 0 && (
+              {friends.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={2} className="text-center">You haven't added any friends yet.</TableCell>
                 </TableRow>

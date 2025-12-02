@@ -35,6 +35,7 @@ export default function Newsletter() {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="text-base"
+            suppressHydrationWarning
           />
           <Button type="submit" className="w-full sm:w-auto">Subscribe</Button>
         </form>

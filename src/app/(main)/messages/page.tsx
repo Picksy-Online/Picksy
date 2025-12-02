@@ -51,23 +51,25 @@ export default function MessagesPage() {
                         <CardTitle>Conversations</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ul className="space-y-2">
-                           {conversations.map(convo => (
-                             <li key={convo.id} onClick={() => setSelectedConvo(convo)} className={cn("p-3 rounded-lg cursor-pointer hover:bg-muted", selectedConvo.id === convo.id && 'bg-muted')}>
-                                 <div className="flex items-center gap-3">
-                                     <Avatar>
-                                         <AvatarImage src={convo.withUser?.avatarUrl} />
-                                         <AvatarFallback>
-                                            {convo.withUser?.id === 'bot' ? <Bot /> : convo.withUser?.name.charAt(0)}
-                                         </AvatarFallback>
-                                     </Avatar>
-                                     <div>
-                                         <p className="font-semibold">{convo.withUser?.name}</p>
-                                         <p className="text-sm text-muted-foreground truncate">{convo.messages.at(-1)?.text}</p>
-                                     </div>
-                                 </div>
-                             </li>
-                           ))}
+                        <ul className="space-y-3 overflow-y-auto max-h-[60vh] pr-2">
+                            {conversations.map(convo => (
+                                <li key={convo.id} onClick={() => setSelectedConvo(convo)}>
+                                    <Card className={cn("cursor-pointer hover:bg-muted transition-colors", selectedConvo.id === convo.id && 'bg-muted border-primary')}>
+                                        <CardContent className="p-3 flex items-center gap-3">
+                                            <Avatar>
+                                                <AvatarImage src={convo.withUser?.avatarUrl} />
+                                                <AvatarFallback>
+                                                    {convo.withUser?.id === 'bot' ? <Bot /> : (convo.withUser?.name?.charAt(0) || 'U')}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="overflow-hidden">
+                                                <p className="font-semibold truncate">{convo.withUser?.name || 'Unknown'}</p>
+                                                <p className="text-sm text-muted-foreground truncate">{convo.messages.at(-1)?.text}</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </li>
+                            ))}
                         </ul>
                     </CardContent>
                 </Card>
@@ -75,21 +77,21 @@ export default function MessagesPage() {
                 <Card className="md:col-span-3 flex flex-col">
                     <CardHeader className="border-b">
                         <CardTitle>
-                            {selectedConvo.withUser ? `Chat with ${selectedConvo.withUser.name}`: 'Select a conversation'}
+                            {selectedConvo.withUser ? `Chat with ${selectedConvo.withUser.name || 'Unknown'}` : 'Select a conversation'}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex-grow p-6 space-y-4 overflow-y-auto">
                         {selectedConvo.messages.map((msg, index) => (
-                             <div key={index} className={cn("flex items-end gap-2", msg.from === 'me' ? 'justify-end' : 'justify-start')}>
+                            <div key={index} className={cn("flex items-end gap-2", msg.from === 'me' ? 'justify-end' : 'justify-start')}>
                                 {msg.from === 'them' && (
                                     <Avatar className="w-8 h-8">
                                         <AvatarImage src={selectedConvo.withUser?.avatarUrl} />
                                         <AvatarFallback>
-                                            {selectedConvo.withUser?.id === 'bot' ? <Bot /> : selectedConvo.withUser?.name.charAt(0)}
+                                            {selectedConvo.withUser?.id === 'bot' ? <Bot /> : (selectedConvo.withUser?.name?.charAt(0) || 'U')}
                                         </AvatarFallback>
                                     </Avatar>
                                 )}
-                                <div className={cn("max-w-xs md:max-w-md p-3 rounded-lg", msg.from === 'me' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                                <div className={cn("max-w-[75%] p-3 rounded-lg break-words whitespace-pre-wrap", msg.from === 'me' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                                     <p>{msg.text}</p>
                                     <p className="text-xs mt-1 opacity-70">{msg.timestamp}</p>
                                 </div>
@@ -98,13 +100,13 @@ export default function MessagesPage() {
                     </CardContent>
                     <div className="p-4 border-t">
                         <div className="flex items-center gap-2">
-                            <Textarea 
-                                placeholder="Type your message..." 
+                            <Textarea
+                                placeholder="Type your message..."
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 rows={1}
                                 className="resize-none"
-                             />
+                            />
                             <Button onClick={handleSendMessage} disabled={!newMessage.trim()}>
                                 <Send className="w-4 h-4" />
                                 <span className="sr-only">Send</span>

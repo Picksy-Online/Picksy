@@ -9,8 +9,16 @@ import React from 'react';
 // We'll just re-export useUser as useAuth for now.
 // A better solution would be to refactor all useAuth() calls to useUser().
 
+import { User as CustomUser } from '@/lib/types';
+
 export const useAuth = () => {
-    const { user, isUserLoading, userError } = useUser();
+    const { user: firebaseUser, isUserLoading, userError } = useUser();
+
+    const user: CustomUser | null = firebaseUser ? {
+        ...firebaseUser,
+        id: firebaseUser.uid,
+    } : null;
+
     return { user, loading: isUserLoading, error: userError };
 }
 

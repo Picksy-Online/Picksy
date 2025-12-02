@@ -21,6 +21,11 @@ import ProductReviews from '@/components/product/ProductReviews';
 import { useViewedProducts } from '@/context/ViewedProductsContext';
 import { useEffect } from 'react';
 
+import { GradingBadge } from "@/components/product/grading-badge";
+import { PriceHistoryChart } from "@/components/product/price-history-chart";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+
 function EbaySoldListings({ listings }: { listings: SearchEbaySoldOutput['soldListings'] }) {
   if (listings.length === 0) {
     return <p>No recent sold listings found on eBay.</p>;
@@ -65,6 +70,7 @@ export default function ProductPageContent({ product, initialRecommendedProducts
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { addItem } = useCart();
   const { markAsViewed } = useViewedProducts();
+  const router = useRouter();
 
   useEffect(() => {
     markAsViewed(product.id);
@@ -94,7 +100,11 @@ export default function ProductPageContent({ product, initialRecommendedProducts
             <ImageZoom
               src={product.imageUrls[selectedImageIndex]}
               alt={product.name}
-              className={cn("w-full transition-all duration-300", isCollectorCard ? "aspect-[1/1.4]" : "aspect-square")}
+              className={cn(
+                "w-full transition-all duration-300",
+                isCollectorCard ? "aspect-[1/1.4]" : "aspect-square",
+                product.category === 'Collector Coins' && "rounded-full"
+              )}
               imageHint={product.imageHint}
             />
           </div>
@@ -103,6 +113,7 @@ export default function ProductPageContent({ product, initialRecommendedProducts
               {product.imageUrls.map((url, index) => (
                 <button
                   key={index}
+                  onMouseEnter={() => setSelectedImageIndex(index)}
                   onClick={() => setSelectedImageIndex(index)}
                   className={cn(
                     "relative w-20 h-20 rounded-md overflow-hidden border-2 flex-shrink-0",
@@ -125,6 +136,15 @@ export default function ProductPageContent({ product, initialRecommendedProducts
                 4.8 (12 reviews)
               </div>
             </div>
+
+            {product.gradingCompany && (
+              <GradingBadge
+                company={product.gradingCompany}
+                grade={product.grade}
+                className="mt-2 mb-1"
+              />
+            )}
+
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight font-headline lg:text-5xl">
               {product.name}
             </h1>
@@ -189,7 +209,21 @@ export default function ProductPageContent({ product, initialRecommendedProducts
               Ships from Australia
             </div>
           </div>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-fit -ml-2 text-muted-foreground hover:text-foreground"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Search
+          </Button>
         </div>
+      </div>
+
+      <div className="mt-12">
+        <PriceHistoryChart currentPrice={product.price} />
       </div>
 
       {isCollectorCard && (

@@ -21,21 +21,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Product, User } from "@/lib/types";
+import type { Product, User, Category } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { notFound } from "next/navigation";
 
-export default function CollectionPageContent({ slug }: { slug: string }) {
+export default function CollectionPageContent({ category }: { category: Category }) {
     const { user } = useAuth() as { user: User | null };
     const [sortOrder, setSortOrder] = useState<string>("price-asc");
     const [includedSellers, setIncludedSellers] = useState<string[]>([]);
     const [excludedSellers, setExcludedSellers] = useState<string[]>([]);
     const [postcode, setPostcode] = useState<string>("");
-
-    const category = categories.find((cat) => cat.slug === slug);
-    if (!category) {
-        notFound();
-    }
 
     const sellerPostcodeMap = useMemo(() => {
         return users.reduce((acc, seller) => {

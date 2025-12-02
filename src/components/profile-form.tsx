@@ -42,7 +42,7 @@ export function ProfileForm({ currentUser }: { currentUser: User }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    currentUser.photoURL
+    currentUser.photoURL || null
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 

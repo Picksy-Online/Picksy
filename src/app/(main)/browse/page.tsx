@@ -23,10 +23,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DetailedSearch } from "@/components/detailed-search";
 import type { Product, User } from "@/lib/types";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function BrowsePage() {
-  const { user } = useAuth() as { user: User | null };
+  const { user } = useAuth();
   const [sortOrder, setSortOrder] = useState<string>("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
@@ -126,10 +128,19 @@ export default function BrowsePage() {
 
   return (
     <div className="pt-5 pb-12 p-5">
-      <h1 className="text-3xl font-bold font-headline">Marketplace</h1>
-      <p className="mt-2 text-muted-foreground">Browse all products from our marketplace.</p>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold font-headline">Browse</h1>
+        {user && (
+          <Button asChild>
+            <Link href="/dashboard/sales">
+              <PlusCircle className="w-4 h-4 mr-2" />
+              List Item
+            </Link>
+          </Button>
+        )}
+      </div>
 
-      <div className="my-8">
+      <div className="mb-8">
         <DetailedSearch
           onSearch={(filters) => {
             setSearchQuery(filters.query);
@@ -148,7 +159,7 @@ export default function BrowsePage() {
         />
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-0 mt-8">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 mt-8">
         {sortedAndFilteredProducts.length > 0 ? (
           sortedAndFilteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} forceSquare />

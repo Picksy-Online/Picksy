@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-export function SearchBar() {
+export function SearchBar({ className }: { className?: string }) {
   const [isCardSearch, setIsCardSearch] = useState(false);
   const [query, setQuery] = useState('');
   const router = useRouter();
@@ -51,7 +51,7 @@ export function SearchBar() {
   }
 
   return (
-    <div className="flex w-full max-w-sm items-center space-x-2">
+    <div className={cn("flex w-full items-center space-x-2", className)}>
       <Input
         type="search"
         placeholder="Search for items..."

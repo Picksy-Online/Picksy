@@ -7,14 +7,19 @@
  * - CheckCardConditionOutput - The return type for the checkCardCondition function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const CheckCardConditionInputSchema = z.object({
-  cardImageUri: z
+  frontImageUri: z
     .string()
     .describe(
-      'A photo of the trading card, as a data URI that must include a MIME type and use Base64 encoding.'
+      'A photo of the front of the trading card, as a data URI.'
+    ),
+  backImageUri: z
+    .string()
+    .describe(
+      'A photo of the back of the trading card, as a data URI.'
     ),
 });
 export type CheckCardConditionInput = z.infer<
@@ -22,15 +27,13 @@ export type CheckCardConditionInput = z.infer<
 >;
 
 const CheckCardConditionOutputSchema = z.object({
-  centering: z
-    .string()
-    .describe('An assessment of the card\'s centering (e.g., "55/45 L/R").'),
-  corners: z.string().describe('An assessment of the card\'s corners.'),
-  edges: z.string().describe('An assessment of the card\'s edges.'),
-  surface: z.string().describe('An assessment of the card\'s surface.'),
-  overallGrade: z
-    .string()
-    .describe('An estimated overall grade (e.g., "PSA 8" or "Near Mint").'),
+  isImageQualitySufficient: z.boolean().describe('Whether the images are clear enough to grade (shows edges, corners, good lighting).'),
+  qualityFeedback: z.string().optional().describe('Feedback if the image quality is insufficient (e.g., "Background too cluttered", "Corners cut off").'),
+  centering: z.string().optional().describe('An assessment of the card\'s centering.'),
+  corners: z.string().optional().describe('An assessment of the card\'s corners.'),
+  edges: z.string().optional().describe('An assessment of the card\'s edges.'),
+  surface: z.string().optional().describe('An assessment of the card\'s surface.'),
+  overallGrade: z.string().optional().describe('An estimated overall grade.'),
 });
 export type CheckCardConditionOutput = z.infer<
   typeof CheckCardConditionOutputSchema
@@ -44,11 +47,17 @@ export async function checkCardCondition(
 
 const prompt = ai.definePrompt({
   name: 'checkCardConditionPrompt',
-  input: {schema: CheckCardConditionInputSchema},
-  output: {schema: CheckCardConditionOutputSchema},
-  prompt: `You are a professional trading card grader. Analyze the provided image of a trading card and assess its condition based on the following criteria: centering, corners, edges, and surface. Provide an estimated overall grade.
+  input: { schema: CheckCardConditionInputSchema },
+  output: { schema: CheckCardConditionOutputSchema },
+  prompt: `You are a professional trading card grader. Analyze the provided images (front and back) of a trading card.
 
-Card Image: {{media url=cardImageUri}}`,
+First, assess the image quality. The images MUST be taken on a background that shows the full details of the card, including all edges and corners. The lighting must be sufficient.
+If the images are blurry, cut off, or the background obscures the edges, set "isImageQualitySufficient" to false and provide specific "qualityFeedback" asking for a better picture.
+
+If the quality is sufficient, set "isImageQualitySufficient" to true and proceed to assess the condition based on: centering, corners, edges, and surface (front and back). Provide an estimated overall grade.
+
+Front Image: {{media url=frontImageUri}}
+Back Image: {{media url=backImageUri}}`,
 });
 
 const checkCardConditionFlow = ai.defineFlow(
@@ -58,7 +67,7 @@ const checkCardConditionFlow = ai.defineFlow(
     outputSchema: CheckCardConditionOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const { output } = await prompt(input);
     return output!;
   }
 );

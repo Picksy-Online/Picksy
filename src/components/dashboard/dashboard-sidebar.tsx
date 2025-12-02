@@ -23,8 +23,8 @@ export default function DashboardSidebar() {
     const pathname = usePathname();
     return (
         <Sidebar>
-            <SidebarHeader>
-                 <div className="flex items-center justify-between">
+            <SidebarHeader className="pt-6">
+                <div className="flex items-center justify-between">
                     <Link href="/" className="inline-block">
                         <Logo className="w-auto h-7" />
                     </Link>

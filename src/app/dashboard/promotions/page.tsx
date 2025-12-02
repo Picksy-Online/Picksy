@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Copy, Zap, Facebook } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { products as productsData, Product } from '@/lib/data';
+import { products as productsData } from '@/lib/data';
+import { Product } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 import { crossPlatformPost, CrossPlatformPostOutput } from '@/ai/flows/cross-platform-posting';
 
@@ -41,15 +42,15 @@ export default function CrossPlatformPostingPage() {
 
   useEffect(() => {
     // In a real app, you'd fetch products for the current seller
-    if (user) {
+    if (user && user.id) {
       setProducts(productsData.filter(p => p.sellerId === user.id));
     }
   }, [user]);
 
-  const selectedProduct = form.watch('productId') 
+  const selectedProduct = form.watch('productId')
     ? products.find(p => p.id === form.watch('productId'))
     : null;
-    
+
   const selectedMarketplace = form.watch('marketplace');
 
   const onSubmit = async (values: FormValues) => {
@@ -74,22 +75,22 @@ export default function CrossPlatformPostingPage() {
       setLoading(false);
     }
   };
-  
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({ title: 'Copied to clipboard!' });
   };
-  
+
   const handleShareToFacebook = () => {
     if (!selectedProduct || !result) return;
-    
+
     // It's best to get the origin dynamically in a real app
     const siteUrl = window.location.origin;
     const productUrl = `${siteUrl}/product/${selectedProduct.id}`;
-    
+
     // The quote param is used by Facebook to pre-fill the post text
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(result.optimizedListing)}`;
-    
+
     window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -136,7 +137,7 @@ export default function CrossPlatformPostingPage() {
                     {marketplaces.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                 {form.formState.errors.marketplace && <p className="text-sm text-red-600 mt-1">{form.formState.errors.marketplace.message}</p>}
+                {form.formState.errors.marketplace && <p className="text-sm text-red-600 mt-1">{form.formState.errors.marketplace.message}</p>}
               </div>
 
               <Button type="submit" disabled={loading} className="w-full">
@@ -177,11 +178,11 @@ export default function CrossPlatformPostingPage() {
                   </div>
                 </div>
                 {result.tags && result.tags.length > 0 && (
-                   <div>
+                  <div>
                     <h3 className="font-semibold mb-2">Suggested Tags</h3>
                     <div className="relative">
                       <Textarea value={result.tags.join(', ')} readOnly rows={3} className="bg-muted" />
-                       <Button
+                      <Button
                         variant="ghost"
                         size="icon"
                         className="absolute top-2 right-2 h-7 w-7"
@@ -192,7 +193,7 @@ export default function CrossPlatformPostingPage() {
                     </div>
                   </div>
                 )}
-                 {selectedMarketplace === 'Facebook Marketplace' && (
+                {selectedMarketplace === 'Facebook Marketplace' && (
                   <Button onClick={handleShareToFacebook} className="w-full">
                     <Facebook className="mr-2 h-4 w-4" />
                     Share on Facebook
@@ -207,4 +208,3 @@ export default function CrossPlatformPostingPage() {
   );
 }
 
-    

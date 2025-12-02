@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,8 @@ export function ProductQuickView({ product, children }: ProductQuickViewProps) {
   const canEdit = user?.email === '1@1.com' || user?.id === product.sellerId;
   const { markAsViewed } = useViewedProducts();
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   return (
     <Dialog onOpenChange={(open) => {
       if (open) markAsViewed(product.id);
@@ -38,12 +41,40 @@ export function ProductQuickView({ product, children }: ProductQuickViewProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[800px]">
         <div className="grid gap-8 md:grid-cols-2">
-          <ImageZoom
-            src={product.imageUrls[0]}
-            alt={product.name}
-            className={cn("w-full rounded-lg overflow-hidden", isCollectorCard ? "aspect-[1/1.4]" : "aspect-square")}
-            imageHint={product.imageHint}
-          />
+          <div className="space-y-4">
+            <ImageZoom
+              src={product.imageUrls[selectedImageIndex]}
+              alt={product.name}
+              className={cn(
+                "w-full overflow-hidden",
+                isCollectorCard ? "aspect-[1/1.4] rounded-lg" : "aspect-square rounded-lg",
+                product.category === 'Collector Coins' && "rounded-full"
+              )}
+              imageHint={product.imageHint}
+            />
+            {product.imageUrls.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {product.imageUrls.map((url, index) => (
+                  <button
+                    key={index}
+                    onMouseEnter={() => setSelectedImageIndex(index)}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={cn(
+                      "relative w-16 h-16 rounded-md overflow-hidden border-2 flex-shrink-0 cursor-pointer",
+                      selectedImageIndex === index ? "border-primary" : "border-transparent"
+                    )}
+                  >
+                    <Image
+                      src={url}
+                      alt={`View ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="flex flex-col gap-6">
             <DialogHeader>
               <DialogTitle className="text-3xl font-extrabold tracking-tight font-headline lg:text-4xl">

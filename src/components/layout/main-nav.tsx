@@ -8,6 +8,7 @@ export function MainNav() {
     { href: "/collector-cards", label: "Cards" },
     { href: "/collectable-coins", label: "Coins" },
     { href: "/collectibles", label: "Collectables" },
+    { href: "/wanted", label: "Wanted" },
     { href: "/sellers", label: "Sellers" },
     { href: "/business", label: "Business" },
   ];

@@ -7,13 +7,14 @@ export default async function ProductPageLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const product = await getProductById(params.id);
+  const { id } = await params;
+  const product = await getProductById(id);
 
   return (
     <ProductPageLayoutClient product={product}>
-        {children}
+      {children}
     </ProductPageLayoutClient>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -41,10 +42,19 @@ export default function Hero() {
 
 
   return (
-    <section className="relative bg-gradient-to-b from-blue-50 via-gray-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
+    <section className="relative bg-white dark:bg-slate-900 overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8 py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7 lg:col-span-6">
+            <div className="mb-8 relative w-full max-w-[600px] h-[200px] md:h-[250px]">
+              <Image
+                src="/picksy-logo-full.png"
+                alt="Picksy Logo"
+                fill
+                className="object-contain object-left"
+                priority
+              />
+            </div>
             <h1 className="text-4xl md:text-6xl font-headline font-extrabold tracking-tight mb-4 text-foreground">
               Discover curated, one-of-a-kind goods.
             </h1>

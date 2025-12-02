@@ -31,6 +31,13 @@ import {
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Image from 'next/image';
+import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 // Mock data for top purchasers and recent sales
 const topPurchasers = [
@@ -39,12 +46,12 @@ const topPurchasers = [
   { id: 'user_6', name: 'Olivia', avatarUrl: 'https://picsum.photos/seed/olivia/100/100', purchases: 7, totalSpent: 280.00 },
 ];
 
-const recentSales = allProducts.slice(0, 3).map(p => ({...p, date: new Date().toLocaleDateString()}));
+const recentSales = allProducts.slice(0, 3).map(p => ({ ...p, date: new Date().toLocaleDateString() }));
 
 export default function SalesPage() {
   const { user } = useAuth();
 
-  if (!user) {
+  if (!user || !user.id) {
     return null; // or a loading spinner
   }
 
@@ -84,15 +91,33 @@ export default function SalesPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-start">
         <div>
-            <h1 className="text-3xl font-bold font-headline">Sales Dashboard</h1>
-            <p className="text-muted-foreground">
-                A complete overview of your store's performance.
-            </p>
+          <h1 className="text-3xl font-bold font-headline">Sales Dashboard</h1>
+          <p className="text-muted-foreground">
+            A complete overview of your store's performance.
+          </p>
         </div>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add New Listing
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add New Listing
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link href="/sell-cards">Sell Card</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/sell-coins">Sell Coin</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/sell-collectibles">Sell Collectible</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/wanted/create">Post Wanted Item</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -135,7 +160,7 @@ export default function SalesPage() {
                         alt={product.name}
                         className="rounded-md aspect-square object-cover"
                         height="64"
-                        src={product.imageUrl}
+                        src={product.imageUrls[0]}
                         width="64"
                       />
                     </TableCell>
@@ -160,47 +185,47 @@ export default function SalesPage() {
         </Card>
 
         <div className="space-y-8">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Top Purchasers</CardTitle>
-                    <CardDescription>Your most loyal customers.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {topPurchasers.map(p => (
-                        <div key={p.id} className="flex items-center gap-4">
-                            <Avatar>
-                                <AvatarImage src={p.avatarUrl} />
-                                <AvatarFallback>{p.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                                <p className="font-semibold">{p.name}</p>
-                                <p className="text-xs text-muted-foreground">{p.purchases} purchases</p>
-                            </div>
-                            <div className="font-medium">{formatCurrency(p.totalSpent)}</div>
-                        </div>
-                    ))}
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableBody>
-                            {recentSales.map(sale => (
-                                <TableRow key={sale.id}>
-                                    <TableCell>
-                                        <div className="font-medium">{sale.name}</div>
-                                        <div className="text-sm text-muted-foreground">{sale.date}</div>
-                                    </TableCell>
-                                    <TableCell className="text-right">{formatCurrency(sale.price)}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Top Purchasers</CardTitle>
+              <CardDescription>Your most loyal customers.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {topPurchasers.map(p => (
+                <div key={p.id} className="flex items-center gap-4">
+                  <Avatar>
+                    <AvatarImage src={p.avatarUrl} />
+                    <AvatarFallback>{p.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <p className="font-semibold">{p.name}</p>
+                    <p className="text-xs text-muted-foreground">{p.purchases} purchases</p>
+                  </div>
+                  <div className="font-medium">{formatCurrency(p.totalSpent)}</div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Sales</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableBody>
+                  {recentSales.map(sale => (
+                    <TableRow key={sale.id}>
+                      <TableCell>
+                        <div className="font-medium">{sale.name}</div>
+                        <div className="text-sm text-muted-foreground">{sale.date}</div>
+                      </TableCell>
+                      <TableCell className="text-right">{formatCurrency(sale.price)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

@@ -44,8 +44,8 @@ export default function AdminUsersPage() {
     const [selectedUser, setSelectedUser] = useState<typeof users[0] | null>(null);
 
     const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+        (user.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+        (user.email?.toLowerCase() || '').includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -83,11 +83,11 @@ export default function AdminUsersPage() {
                     <TableBody>
                         {filteredUsers.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell className="font-medium">{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
+                                <TableCell className="font-medium">{user.name || 'Unknown'}</TableCell>
+                                <TableCell>{user.email || 'No Email'}</TableCell>
                                 <TableCell>
-                                    <Badge variant={user.isSeller ? "default" : "secondary"}>
-                                        {user.isSeller ? 'Seller' : 'Buyer'}
+                                    <Badge variant={!!user.storeName ? "default" : "secondary"}>
+                                        {!!user.storeName ? 'Seller' : 'Buyer'}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
@@ -103,7 +103,7 @@ export default function AdminUsersPage() {
                                         </DialogTrigger>
                                         <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
                                             <DialogHeader>
-                                                <DialogTitle>User Details: {user.name}</DialogTitle>
+                                                <DialogTitle>User Details: {user.name || 'Unknown'}</DialogTitle>
                                                 <DialogDescription>
                                                     Transparency Log & Activity Monitor
                                                 </DialogDescription>
@@ -123,17 +123,17 @@ export default function AdminUsersPage() {
                                                                 <h3 className="font-semibold mb-2">Personal Information</h3>
                                                                 <div className="space-y-1 text-sm">
                                                                     <p><span className="text-muted-foreground">ID:</span> {user.id}</p>
-                                                                    <p><span className="text-muted-foreground">Email:</span> {user.email}</p>
-                                                                    <p><span className="text-muted-foreground">Role:</span> {user.isSeller ? 'Seller' : 'Buyer'}</p>
+                                                                    <p><span className="text-muted-foreground">Email:</span> {user.email || 'N/A'}</p>
+                                                                    <p><span className="text-muted-foreground">Role:</span> {!!user.storeName ? 'Seller' : 'Buyer'}</p>
                                                                     <p><span className="text-muted-foreground">Postcode:</span> {user.postcode}</p>
                                                                 </div>
                                                             </div>
-                                                            {user.isSeller && (
+                                                            {!!user.storeName && (
                                                                 <div>
                                                                     <h3 className="font-semibold mb-2">Store Information</h3>
                                                                     <div className="space-y-1 text-sm">
-                                                                        <p><span className="text-muted-foreground">Store Name:</span> {user.storeName}</p>
-                                                                        <p><span className="text-muted-foreground">Bio:</span> {user.bio}</p>
+                                                                        <p><span className="text-muted-foreground">Store Name:</span> {user.storeName || 'N/A'}</p>
+                                                                        <p><span className="text-muted-foreground">Bio:</span> {user.bio || 'N/A'}</p>
                                                                     </div>
                                                                 </div>
                                                             )}

@@ -1,12 +1,12 @@
 
 'use client';
 
-import { useFirebase } from '@/firebase';
+import { useAuth } from '@/hooks/use-auth';
 import { ProfileForm } from '@/components/profile-form';
 import { Loader2 } from 'lucide-react';
 
 export default function ProfilePage() {
-  const { user, isUserLoading } = useFirebase();
+  const { user, loading: isUserLoading } = useAuth();
 
   if (isUserLoading) {
     return (
@@ -26,7 +26,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container max-w-4xl py-12">
-       <div className="space-y-2">
+      <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight font-headline md:text-4xl">
           Your Profile
         </h1>

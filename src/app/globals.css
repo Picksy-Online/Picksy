@@ -10,8 +10,8 @@
     --card-foreground: 224 71% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-    --primary: 231 48% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 196 22% 47%;
+    --primary-foreground: 39 52% 89%;
     --secondary: 231 60% 90%;
     --secondary-foreground: 224 71% 4%;
     --muted: 231 60% 85%;
@@ -38,6 +38,7 @@
     --sidebar-border: 231 48% 88%;
     --sidebar-ring: 231 48% 48%;
   }
+
   .dark {
     --background: 224 71% 4%;
     --foreground: 231 60% 94%;
@@ -45,8 +46,8 @@
     --card-foreground: 231 60% 94%;
     --popover: 224 71% 4%;
     --popover-foreground: 231 60% 94%;
-    --primary: 231 48% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 196 22% 47%;
+    --primary-foreground: 39 52% 89%;
     --secondary: 224 71% 12%;
     --secondary-foreground: 231 60% 94%;
     --muted: 224 71% 12%;
@@ -78,6 +79,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -57,7 +57,7 @@ function ResultDisplay({ result }: { result: ModerationState["result"] }) {
     if (result.policyViolations.length > 0) return "destructive";
     return "default";
   };
-  
+
   const getComplianceIcon = () => {
     if (result.isCompliant) return <CheckCircle className="text-green-500" />;
     if (result.isFakeOrMalicious) return <XCircle className="text-red-500" />;
@@ -132,7 +132,7 @@ export function ModerationForm() {
     if (product) {
       setName(product.name);
       setDescription(product.description);
-      urlToBase64(product.imageUrl).then(setProductImageUri).catch(console.error);
+      urlToBase64(product.imageUrls[0] || '').then(setProductImageUri).catch(console.error);
     } else {
       setName("");
       setDescription("");
@@ -187,9 +187,9 @@ export function ModerationForm() {
               placeholder="Describe the product..."
             />
           </div>
-          
+
           <input type="hidden" name="productImageUri" value={productImageUri} />
-          
+
           {selectedProductId && productImageUri && (
             <div className="space-y-2">
               <Label>Product Image</Label>
@@ -202,7 +202,7 @@ export function ModerationForm() {
           <SubmitButton />
         </CardFooter>
       </Card>
-      
+
       {state.error && (
         <Alert variant="destructive" className="mt-4">
           <AlertTriangle className="w-4 h-4" />

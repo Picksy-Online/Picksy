@@ -2,7 +2,7 @@
 import { type User as FirebaseUser } from 'firebase/auth';
 
 // We can extend the FirebaseUser type to include our custom fields
-export type User = FirebaseUser & {
+export type User = Partial<FirebaseUser> & {
   id: string; // Mock data uses id
   name?: string; // Mock data uses name
   avatarUrl?: string; // Mock data uses avatarUrl
@@ -32,6 +32,9 @@ export type Product = {
   imageUrls: string[];
   imageHint: string;
   isPrivate?: boolean;
+  gradingCompany?: 'PSA' | 'BGS' | 'CGC' | 'SGC' | 'Raw';
+  grade?: string;
+  certNumber?: string;
 };
 
 export type Auction = {
@@ -44,6 +47,17 @@ export type Auction = {
   sellerId: string;
   imageUrl: string;
   imageHint: string;
+};
+
+export type WantedItem = {
+  id: string;
+  title: string;
+  description: string;
+  targetPrice: number;
+  category: string;
+  creatorId: string;
+  imageUrl?: string;
+  createdAt: string;
 };
 
 export type ProductSearchParams = {

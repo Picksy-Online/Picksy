@@ -5,13 +5,14 @@ import CollectionPageContent from "./CollectionPageContent";
 import { Metadata } from "next";
 
 interface CollectionPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
-  const category = categories.find((c) => c.slug === params.slug);
+  const { slug } = await params;
+  const category = categories.find((c) => c.slug === slug);
 
   if (!category) {
     return {
@@ -29,8 +30,9 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   };
 }
 
-export default function CollectionPage({ params }: CollectionPageProps) {
-  const category = categories.find((c) => c.slug === params.slug);
+export default async function CollectionPage({ params }: CollectionPageProps) {
+  const { slug } = await params;
+  const category = categories.find((c) => c.slug === slug);
 
   if (!category) {
     notFound();

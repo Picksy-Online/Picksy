@@ -1,5 +1,5 @@
 
-import type { Product, User, Category, Auction } from '@/lib/types';
+import type { Product, User, Category, Auction, WantedItem } from '@/lib/types';
 
 export const users: User[] = [
   {
@@ -65,6 +65,12 @@ export const categories: Category[] = [
     slug: 'collector-cards',
     description: 'Trading cards, sports cards, and other collectible cards.',
   },
+  {
+    id: 'cat_6',
+    name: 'Collector Coins',
+    slug: 'collector-coins',
+    description: 'Rare and collectible coins from around the world.',
+  },
 ];
 
 export const products: Product[] = [
@@ -76,7 +82,11 @@ export const products: Product[] = [
     price: 185.0,
     category: 'Vintage',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/leatherjacket/600/800'],
+    imageUrls: [
+      'https://picsum.photos/seed/leatherjacket/600/800',
+      'https://picsum.photos/seed/leatherjacket-back/600/800',
+      'https://picsum.photos/seed/leatherjacket-detail/600/800'
+    ],
     imageHint: 'leather jacket',
   },
   {
@@ -98,7 +108,11 @@ export const products: Product[] = [
     price: 320.0,
     category: 'Home & Living',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/abstractart/800/600'],
+    imageUrls: [
+      'https://picsum.photos/seed/abstractart/800/600',
+      'https://picsum.photos/seed/abstractart-detail1/800/600',
+      'https://picsum.photos/seed/abstractart-detail2/800/600'
+    ],
     imageHint: 'abstract art',
   },
   {
@@ -122,6 +136,7 @@ export const products: Product[] = [
     sellerId: 'user_2',
     imageUrls: [
       'https://picsum.photos/seed/dragoncard/400/560',
+      'https://picsum.photos/seed/dragoncard-back/400/560',
       'https://picsum.photos/seed/dragoncard2/400/560',
       'https://picsum.photos/seed/dragoncard3/400/560',
       'https://picsum.photos/seed/dragoncard4/400/560',
@@ -159,7 +174,7 @@ export const products: Product[] = [
     price: 450.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/sportscard/400/560'],
+    imageUrls: ['https://picsum.photos/seed/sportscard/400/560', 'https://picsum.photos/seed/sportscard-back/400/560'],
     imageHint: 'sports card',
   },
   {
@@ -213,7 +228,7 @@ export const products: Product[] = [
     price: 350.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/charizard/400/560'],
+    imageUrls: ['https://picsum.photos/seed/charizard/400/560', 'https://picsum.photos/seed/charizard-back/400/560'],
     imageHint: 'fire dragon',
   },
   {
@@ -223,8 +238,11 @@ export const products: Product[] = [
     price: 5275000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/pikachu/400/560'],
+    imageUrls: ['https://picsum.photos/seed/pikachu/400/560', 'https://picsum.photos/seed/pikachu-back/400/560'],
     imageHint: 'electric mouse',
+    gradingCompany: 'PSA',
+    grade: '10',
+    certNumber: '12345678'
   },
   {
     id: 'prod_15',
@@ -233,8 +251,11 @@ export const products: Product[] = [
     price: 720000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/jordan/400/560'],
+    imageUrls: ['https://picsum.photos/seed/jordan/400/560', 'https://picsum.photos/seed/jordan-back/400/560'],
     imageHint: 'basketball player',
+    gradingCompany: 'PSA',
+    grade: '10',
+    certNumber: '87654321'
   },
   {
     id: 'prod_16',
@@ -243,8 +264,11 @@ export const products: Product[] = [
     price: 6600000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/wagner/400/560'],
+    imageUrls: ['https://picsum.photos/seed/wagner/400/560', 'https://picsum.photos/seed/wagner-back/400/560'],
     imageHint: 'baseball player',
+    gradingCompany: 'SGC',
+    grade: '3',
+    certNumber: '11223344'
   },
   {
     id: 'prod_17',
@@ -253,8 +277,11 @@ export const products: Product[] = [
     price: 511100.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/lotus/400/560'],
+    imageUrls: ['https://picsum.photos/seed/lotus/400/560', 'https://picsum.photos/seed/lotus-back/400/560'],
     imageHint: 'black flower',
+    gradingCompany: 'BGS',
+    grade: '9.5',
+    certNumber: '99887766'
   },
   {
     id: 'prod_18',
@@ -263,8 +290,11 @@ export const products: Product[] = [
     price: 3750000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/gretzky/400/560'],
+    imageUrls: ['https://picsum.photos/seed/gretzky/400/560', 'https://picsum.photos/seed/gretzky-back/400/560'],
     imageHint: 'hockey player',
+    gradingCompany: 'PSA',
+    grade: '10',
+    certNumber: '44556677'
   },
   {
     id: 'prod_19',
@@ -273,7 +303,7 @@ export const products: Product[] = [
     price: 12600000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/mantle/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mantle/400/560', 'https://picsum.photos/seed/mantle-back/400/560'],
     imageHint: 'baseball legend',
   },
   {
@@ -283,7 +313,7 @@ export const products: Product[] = [
     price: 1795000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/kobe-rookie/400/560'],
+    imageUrls: ['https://picsum.photos/seed/kobe-rookie/400/560', 'https://picsum.photos/seed/kobe-rookie-back/400/560'],
     imageHint: 'basketball star',
   },
   {
@@ -293,7 +323,7 @@ export const products: Product[] = [
     price: 500000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/mahomes-kaboom/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mahomes-kaboom/400/560', 'https://picsum.photos/seed/mahomes-kaboom-back/400/560'],
     imageHint: 'football qb',
   },
   {
@@ -303,7 +333,7 @@ export const products: Product[] = [
     price: 312000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/ronaldo-rookie/400/560'],
+    imageUrls: ['https://picsum.photos/seed/ronaldo-rookie/400/560', 'https://picsum.photos/seed/ronaldo-rookie-back/400/560'],
     imageHint: 'soccer star',
   },
   {
@@ -313,7 +343,7 @@ export const products: Product[] = [
     price: 25000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/blastoise/400/560'],
+    imageUrls: ['https://picsum.photos/seed/blastoise/400/560', 'https://picsum.photos/seed/blastoise-back/400/560'],
     imageHint: 'water turtle',
   },
   {
@@ -323,7 +353,7 @@ export const products: Product[] = [
     price: 3107000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/brady-rookie/400/560'],
+    imageUrls: ['https://picsum.photos/seed/brady-rookie/400/560', 'https://picsum.photos/seed/brady-rookie-back/400/560'],
     imageHint: 'nfl goat',
   },
   {
@@ -333,7 +363,7 @@ export const products: Product[] = [
     price: 144300.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/lugia-neo/400/560'],
+    imageUrls: ['https://picsum.photos/seed/lugia-neo/400/560', 'https://picsum.photos/seed/lugia-neo-back/400/560'],
     imageHint: 'sea monster',
   },
   {
@@ -343,7 +373,7 @@ export const products: Product[] = [
     price: 5900000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/curry-logoman/400/560'],
+    imageUrls: ['https://picsum.photos/seed/curry-logoman/400/560', 'https://picsum.photos/seed/curry-logoman-back/400/560'],
     imageHint: 'nba shooter',
   },
   {
@@ -353,7 +383,7 @@ export const products: Product[] = [
     price: 28000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/time-walk/400/560'],
+    imageUrls: ['https://picsum.photos/seed/time-walk/400/560', 'https://picsum.photos/seed/time-walk-back/400/560'],
     imageHint: 'magic spell',
   },
   {
@@ -363,7 +393,7 @@ export const products: Product[] = [
     price: 186000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/ohtani-super/400/560'],
+    imageUrls: ['https://picsum.photos/seed/ohtani-super/400/560', 'https://picsum.photos/seed/ohtani-super-back/400/560'],
     imageHint: 'baseball mvp',
   },
   {
@@ -373,7 +403,7 @@ export const products: Product[] = [
     price: 8500.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/gengar-skyridge/400/560'],
+    imageUrls: ['https://picsum.photos/seed/gengar-skyridge/400/560', 'https://picsum.photos/seed/gengar-skyridge-back/400/560'],
     imageHint: 'ghost pokemon',
   },
   {
@@ -383,7 +413,7 @@ export const products: Product[] = [
     price: 250000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/burrow-shield/400/560'],
+    imageUrls: ['https://picsum.photos/seed/burrow-shield/400/560', 'https://picsum.photos/seed/burrow-shield-back/400/560'],
     imageHint: 'football player',
   },
   {
@@ -393,7 +423,7 @@ export const products: Product[] = [
     price: 15000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/mox-sapphire/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mox-sapphire/400/560', 'https://picsum.photos/seed/mox-sapphire-back/400/560'],
     imageHint: 'blue gem',
   },
   {
@@ -403,7 +433,7 @@ export const products: Product[] = [
     price: 98000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/zion-nebula/400/560'],
+    imageUrls: ['https://picsum.photos/seed/zion-nebula/400/560', 'https://picsum.photos/seed/zion-nebula-back/400/560'],
     imageHint: 'basketball dunker',
   },
   {
@@ -413,7 +443,7 @@ export const products: Product[] = [
     price: 70000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/umbreon-goldstar/400/560'],
+    imageUrls: ['https://picsum.photos/seed/umbreon-goldstar/400/560', 'https://picsum.photos/seed/umbreon-goldstar-back/400/560'],
     imageHint: 'dark pokemon',
   },
   {
@@ -423,7 +453,7 @@ export const products: Product[] = [
     price: 1350000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/pele-rookie/400/560'],
+    imageUrls: ['https://picsum.photos/seed/pele-rookie/400/560', 'https://picsum.photos/seed/pele-rookie-back/400/560'],
     imageHint: 'soccer legend',
   },
   {
@@ -433,7 +463,7 @@ export const products: Product[] = [
     price: 474000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/dominguez-super/400/560'],
+    imageUrls: ['https://picsum.photos/seed/dominguez-super/400/560', 'https://picsum.photos/seed/dominguez-super-back/400/560'],
     imageHint: 'baseball prospect',
   },
   {
@@ -443,7 +473,7 @@ export const products: Product[] = [
     price: 1200.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/tyranitar-neo/400/560'],
+    imageUrls: ['https://picsum.photos/seed/tyranitar-neo/400/560', 'https://picsum.photos/seed/tyranitar-neo-back/400/560'],
     imageHint: 'dinosaur pokemon',
   },
   {
@@ -453,7 +483,7 @@ export const products: Product[] = [
     price: 18000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/ancestral-recall/400/560'],
+    imageUrls: ['https://picsum.photos/seed/ancestral-recall/400/560', 'https://picsum.photos/seed/ancestral-recall-back/400/560'],
     imageHint: 'magic card',
   },
   {
@@ -463,7 +493,7 @@ export const products: Product[] = [
     price: 4600000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/luka-logoman/400/560'],
+    imageUrls: ['https://picsum.photos/seed/luka-logoman/400/560', 'https://picsum.photos/seed/luka-logoman-back/400/560'],
     imageHint: 'basketball pointguard',
   },
   {
@@ -473,7 +503,7 @@ export const products: Product[] = [
     price: 7500.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/dark-charizard/400/560'],
+    imageUrls: ['https://picsum.photos/seed/dark-charizard/400/560', 'https://picsum.photos/seed/dark-charizard-back/400/560'],
     imageHint: 'dark dragon',
   },
   {
@@ -483,7 +513,7 @@ export const products: Product[] = [
     price: 180000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/herbert-shield/400/560'],
+    imageUrls: ['https://picsum.photos/seed/herbert-shield/400/560', 'https://picsum.photos/seed/herbert-shield-back/400/560'],
     imageHint: 'quarterback nfl',
   },
   {
@@ -493,7 +523,7 @@ export const products: Product[] = [
     price: 22000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/shining-charizard/400/560'],
+    imageUrls: ['https://picsum.photos/seed/shining-charizard/400/560', 'https://picsum.photos/seed/shining-charizard-back/400/560'],
     imageHint: 'shiny dragon',
   },
   {
@@ -503,7 +533,7 @@ export const products: Product[] = [
     price: 1100000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/giannis-prizm/400/560'],
+    imageUrls: ['https://picsum.photos/seed/giannis-prizm/400/560', 'https://picsum.photos/seed/giannis-prizm-back/400/560'],
     imageHint: 'greek freak',
   },
   {
@@ -513,7 +543,7 @@ export const products: Product[] = [
     price: 9500.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/volcanic-island/400/560'],
+    imageUrls: ['https://picsum.photos/seed/volcanic-island/400/560', 'https://picsum.photos/seed/volcanic-island-back/400/560'],
     imageHint: 'island volcano',
   },
   {
@@ -523,7 +553,7 @@ export const products: Product[] = [
     price: 15000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/crystal-charizard/400/560'],
+    imageUrls: ['https://picsum.photos/seed/crystal-charizard/400/560', 'https://picsum.photos/seed/crystal-charizard-back/400/560'],
     imageHint: 'crystal dragon',
   },
   {
@@ -533,7 +563,7 @@ export const products: Product[] = [
     price: 8000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/haaland-auto/400/560'],
+    imageUrls: ['https://picsum.photos/seed/haaland-auto/400/560', 'https://picsum.photos/seed/haaland-auto-back/400/560'],
     imageHint: 'soccer striker',
   },
   {
@@ -543,7 +573,7 @@ export const products: Product[] = [
     price: 45000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/rayquaza-star/400/560'],
+    imageUrls: ['https://picsum.photos/seed/rayquaza-star/400/560', 'https://picsum.photos/seed/rayquaza-star-back/400/560'],
     imageHint: 'sky dragon',
   },
   {
@@ -553,7 +583,7 @@ export const products: Product[] = [
     price: 3900000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/trout-auto/400/560'],
+    imageUrls: ['https://picsum.photos/seed/trout-auto/400/560', 'https://picsum.photos/seed/trout-auto-back/400/560'],
     imageHint: 'baseball outfielder',
   },
   {
@@ -563,7 +593,7 @@ export const products: Product[] = [
     price: 100000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/underground-sea/400/560'],
+    imageUrls: ['https://picsum.photos/seed/underground-sea/400/560', 'https://picsum.photos/seed/underground-sea-back/400/560'],
     imageHint: 'dark sea',
   },
   {
@@ -573,7 +603,7 @@ export const products: Product[] = [
     price: 8000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/venusaur/400/560'],
+    imageUrls: ['https://picsum.photos/seed/venusaur/400/560', 'https://picsum.photos/seed/venusaur-back/400/560'],
     imageHint: 'flower dinosaur',
   },
   {
@@ -583,7 +613,7 @@ export const products: Product[] = [
     price: 5200000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/lebron-rpa/400/560'],
+    imageUrls: ['https://picsum.photos/seed/lebron-rpa/400/560', 'https://picsum.photos/seed/lebron-rpa-back/400/560'],
     imageHint: 'king james',
   },
   {
@@ -593,7 +623,7 @@ export const products: Product[] = [
     price: 800.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/gaeas-cradle/400/560'],
+    imageUrls: ['https://picsum.photos/seed/gaeas-cradle/400/560', 'https://picsum.photos/seed/gaeas-cradle-back/400/560'],
     imageHint: 'forest land',
   },
   {
@@ -603,7 +633,7 @@ export const products: Product[] = [
     price: 15000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/mbappe-auto/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mbappe-auto/400/560', 'https://picsum.photos/seed/mbappe-auto-back/400/560'],
     imageHint: 'french forward',
   },
   {
@@ -613,7 +643,7 @@ export const products: Product[] = [
     price: 25000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/espeon-star/400/560'],
+    imageUrls: ['https://picsum.photos/seed/espeon-star/400/560', 'https://picsum.photos/seed/espeon-star-back/400/560'],
     imageHint: 'psychic pokemon',
   },
   {
@@ -623,7 +653,7 @@ export const products: Product[] = [
     price: 3500.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/jefferson-kaboom/400/560'],
+    imageUrls: ['https://picsum.photos/seed/jefferson-kaboom/400/560', 'https://picsum.photos/seed/jefferson-kaboom-back/400/560'],
     imageHint: 'nfl receiver',
   },
   {
@@ -633,7 +663,7 @@ export const products: Product[] = [
     price: 20000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/mewtwo/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mewtwo/400/560', 'https://picsum.photos/seed/mewtwo-back/400/560'],
     imageHint: 'genetic pokemon',
   },
   {
@@ -643,7 +673,7 @@ export const products: Product[] = [
     price: 45000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/lamelo-gold/400/560'],
+    imageUrls: ['https://picsum.photos/seed/lamelo-gold/400/560', 'https://picsum.photos/seed/lamelo-gold-back/400/560'],
     imageHint: 'nba guard',
   },
   {
@@ -653,7 +683,7 @@ export const products: Product[] = [
     price: 65000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/tropical-wind/400/560'],
+    imageUrls: ['https://picsum.photos/seed/tropical-wind/400/560', 'https://picsum.photos/seed/tropical-wind-back/400/560'],
     imageHint: 'pokemon trophy',
   },
   {
@@ -663,7 +693,7 @@ export const products: Product[] = [
     price: 100.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/force-of-will/400/560'],
+    imageUrls: ['https://picsum.photos/seed/force-of-will/400/560', 'https://picsum.photos/seed/force-of-will-back/400/560'],
     imageHint: 'blue spell',
   },
   {
@@ -673,7 +703,7 @@ export const products: Product[] = [
     price: 1500.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/mcdavid-yg/400/560'],
+    imageUrls: ['https://picsum.photos/seed/mcdavid-yg/400/560', 'https://picsum.photos/seed/mcdavid-yg-back/400/560'],
     imageHint: 'hockey star',
   },
   {
@@ -683,7 +713,7 @@ export const products: Product[] = [
     price: 4500.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/alakazam/400/560'],
+    imageUrls: ['https://picsum.photos/seed/alakazam/400/560', 'https://picsum.photos/seed/alakazam-back/400/560'],
     imageHint: 'spoon bender',
   },
   {
@@ -693,7 +723,7 @@ export const products: Product[] = [
     price: 12000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/ant-rpa/400/560'],
+    imageUrls: ['https://picsum.photos/seed/ant-rpa/400/560', 'https://picsum.photos/seed/ant-rpa-back/400/560'],
     imageHint: 'nba dunker',
   },
   {
@@ -703,7 +733,7 @@ export const products: Product[] = [
     price: 6000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/tundra-beta/400/560'],
+    imageUrls: ['https://picsum.photos/seed/tundra-beta/400/560', 'https://picsum.photos/seed/tundra-beta-back/400/560'],
     imageHint: 'ice land',
   },
   {
@@ -713,7 +743,7 @@ export const products: Product[] = [
     price: 8000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/jolteon-star/400/560'],
+    imageUrls: ['https://picsum.photos/seed/jolteon-star/400/560', 'https://picsum.photos/seed/jolteon-star-back/400/560'],
     imageHint: 'electric pokemon',
   },
   {
@@ -723,7 +753,7 @@ export const products: Product[] = [
     price: 2500.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/lawrence-downtown/400/560'],
+    imageUrls: ['https://picsum.photos/seed/lawrence-downtown/400/560', 'https://picsum.photos/seed/lawrence-downtown-back/400/560'],
     imageHint: 'nfl qb',
   },
   {
@@ -733,7 +763,7 @@ export const products: Product[] = [
     price: 3500.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/gyarados/400/560'],
+    imageUrls: ['https://picsum.photos/seed/gyarados/400/560', 'https://picsum.photos/seed/gyarados-back/400/560'],
     imageHint: 'sea serpent',
   },
   {
@@ -743,7 +773,7 @@ export const products: Product[] = [
     price: 9000.0,
     category: 'Collector Cards',
     sellerId: 'user_3',
-    imageUrls: ['https://picsum.photos/seed/tatum-colorblast/400/560'],
+    imageUrls: ['https://picsum.photos/seed/tatum-colorblast/400/560', 'https://picsum.photos/seed/tatum-colorblast-back/400/560'],
     imageHint: 'celtics star',
   },
   {
@@ -753,7 +783,7 @@ export const products: Product[] = [
     price: 18000.0,
     category: 'Collector Cards',
     sellerId: 'user_1',
-    imageUrls: ['https://picsum.photos/seed/vaporeon-star/400/560'],
+    imageUrls: ['https://picsum.photos/seed/vaporeon-star/400/560', 'https://picsum.photos/seed/vaporeon-star-back/400/560'],
     imageHint: 'water pokemon',
   },
   {
@@ -763,7 +793,7 @@ export const products: Product[] = [
     price: 150000.0,
     category: 'Collector Cards',
     sellerId: 'user_2',
-    imageUrls: ['https://picsum.photos/seed/crosby-cup/400/560'],
+    imageUrls: ['https://picsum.photos/seed/crosby-cup/400/560', 'https://picsum.photos/seed/crosby-cup-back/400/560'],
     imageHint: 'hockey captain',
   },
   // Additional products to fill "New & Trending"
@@ -786,6 +816,91 @@ export const products: Product[] = [
     sellerId: 'user_1',
     imageUrls: ['https://picsum.photos/seed/woolscarf/600/800'],
     imageHint: 'scarf',
+  },
+  // Collector Coins
+  {
+    id: 'prod_coin_1',
+    name: '1933 Saint-Gaudens Double Eagle',
+    description: 'The 1933 Saint-Gaudens Double Eagle is a twenty-dollar gold coin which was produced by the United States Mint in 1933.',
+    price: 18900000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_2',
+    imageUrls: [
+      'https://picsum.photos/seed/double-eagle/500/500',
+      'https://picsum.photos/seed/double-eagle-back/500/500',
+      'https://picsum.photos/seed/double-eagle-side/500/500'
+    ],
+    imageHint: 'gold coin',
+  },
+  {
+    id: 'prod_coin_2',
+    name: 'Flowing Hair Silver Dollar',
+    description: 'The Flowing Hair dollar was the first dollar coin issued by the United States federal government.',
+    price: 10000000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_3',
+    imageUrls: ['https://picsum.photos/seed/flowing-hair/500/500'],
+    imageHint: 'silver coin',
+  },
+  {
+    id: 'prod_coin_3',
+    name: 'Edward III Florin',
+    description: 'The Double Leopard or Florin was an attempt by English King Edward III to produce a gold coinage suitable for use in Europe.',
+    price: 6800000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_1',
+    imageUrls: ['https://picsum.photos/seed/edward-florin/500/500'],
+    imageHint: 'ancient gold coin',
+  },
+  {
+    id: 'prod_coin_4',
+    name: 'Brasher Doubloon',
+    description: 'The Brasher Doubloon is a rare American gold coin struck privately in 1787.',
+    price: 7400000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_2',
+    imageUrls: ['https://picsum.photos/seed/brasher/500/500'],
+    imageHint: 'rare gold coin',
+  },
+  {
+    id: 'prod_coin_5',
+    name: 'Umayyad Gold Dinar',
+    description: 'A very rare gold dinar from the Umayyad Caliphate, dated 723 AD.',
+    price: 4700000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_3',
+    imageUrls: ['https://picsum.photos/seed/umayyad/500/500'],
+    imageHint: 'islamic gold coin',
+  },
+  {
+    id: 'prod_coin_6',
+    name: 'Canadian Gold Maple Leaf',
+    description: '1oz Gold Maple Leaf coin. 99.99% pure gold.',
+    price: 2800.0,
+    category: 'Collector Coins',
+    sellerId: 'user_1',
+    imageUrls: ['https://picsum.photos/seed/maple-leaf/500/500'],
+    imageHint: 'canadian gold coin',
+  },
+  {
+    id: 'prod_coin_7',
+    name: 'Australian Kangaroo Gold Coin',
+    description: '1oz Australian Kangaroo Gold Bullion Coin.',
+    price: 2750.0,
+    category: 'Collector Coins',
+    sellerId: 'user_2',
+    imageUrls: ['https://picsum.photos/seed/kangaroo-gold/500/500'],
+    imageHint: 'australian gold coin',
+  },
+  {
+    id: 'prod_coin_8',
+    name: 'Roman Denarius',
+    description: 'Ancient Roman silver Denarius featuring Emperor Augustus.',
+    price: 450.0,
+    category: 'Collector Coins',
+    sellerId: 'user_3',
+    imageUrls: ['https://picsum.photos/seed/roman-denarius/500/500'],
+    imageHint: 'ancient silver coin',
   },
   {
     id: 'prod_103',
@@ -887,6 +1002,56 @@ export const products: Product[] = [
     imageUrls: ['https://picsum.photos/seed/macrame/600/800'],
     imageHint: 'macrame',
   },
+  {
+    id: 'prod_coin_9',
+    name: 'Ancient Greek Tetradrachm',
+    description: 'Silver Tetradrachm of Athens (c. 440-404 BC) featuring the head of Athena and the owl of wisdom. A classic ancient coin.',
+    price: 1200.0,
+    category: 'Collector Coins',
+    sellerId: 'user_1',
+    imageUrls: ['https://picsum.photos/seed/athens-owl/500/500'],
+    imageHint: 'ancient owl coin',
+  },
+  {
+    id: 'prod_coin_10',
+    name: '1804 Silver Dollar',
+    description: 'The "King of American Coins". One of the rarest and most famous coins in the world.',
+    price: 3800000.0,
+    category: 'Collector Coins',
+    sellerId: 'user_2',
+    imageUrls: ['https://picsum.photos/seed/1804-dollar/500/500'],
+    imageHint: 'rare silver dollar',
+  },
+  {
+    id: 'prod_coin_11',
+    name: 'Krugerrand Gold Coin',
+    description: '1oz South African Krugerrand. The world\'s first modern gold bullion coin.',
+    price: 2600.0,
+    category: 'Collector Coins',
+    sellerId: 'user_3',
+    imageUrls: ['https://picsum.photos/seed/krugerrand/500/500'],
+    imageHint: 'gold krugerrand',
+  },
+  {
+    id: 'prod_coin_12',
+    name: 'Chinese Panda Gold Coin',
+    description: '2024 30g Chinese Gold Panda. Features a changing design of the giant panda every year.',
+    price: 2650.0,
+    category: 'Collector Coins',
+    sellerId: 'user_1',
+    imageUrls: ['https://picsum.photos/seed/panda-gold/500/500'],
+    imageHint: 'panda gold coin',
+  },
+  {
+    id: 'prod_coin_13',
+    name: 'Morgan Silver Dollar',
+    description: '1889-CC Morgan Silver Dollar. A highly desired key date from the Carson City Mint.',
+    price: 3500.0,
+    category: 'Collector Coins',
+    sellerId: 'user_2',
+    imageUrls: ['https://picsum.photos/seed/morgan-dollar/500/500'],
+    imageHint: 'morgan dollar',
+  },
 ];
 
 export const auctions: Auction[] = [
@@ -975,3 +1140,24 @@ export const getProductByIdLegacy = (id: string): Promise<Product | undefined> =
     }, 300);
   });
 };
+export const wantedItems: WantedItem[] = [
+  {
+    id: 'wanted_1',
+    title: '1999 Pokémon Base Set Charizard',
+    description: 'Looking for a PSA 9 or 10 Base Set Charizard. Willing to pay top dollar.',
+    targetPrice: 5000,
+    category: 'Collector Cards',
+    creatorId: 'user_1',
+    imageUrl: 'https://picsum.photos/seed/charizard/400/600',
+    createdAt: '2023-10-27T10:00:00Z',
+  },
+  {
+    id: 'wanted_2',
+    title: 'Vintage Rolex Submariner',
+    description: 'Searching for a 1980s Rolex Submariner in good condition. Box and papers preferred.',
+    targetPrice: 12000,
+    category: 'Fashion',
+    creatorId: 'user_2',
+    createdAt: '2023-10-28T14:30:00Z',
+  },
+];
