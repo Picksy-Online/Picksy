@@ -39,7 +39,7 @@ export function ProductQuickView({ product, children }: ProductQuickViewProps) {
       if (open) markAsViewed(product.id);
     }}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] p-4">
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-4">
             <ImageZoom

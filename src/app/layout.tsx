@@ -70,6 +70,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
+        <script src="https://docs.opencv.org/4.x/opencv.js" async></script>
       </head>
       <body className="font-body antialiased overflow-x-hidden" suppressHydrationWarning>
         <FirebaseClientProvider>
