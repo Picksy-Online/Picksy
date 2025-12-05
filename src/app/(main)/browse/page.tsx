@@ -118,7 +118,14 @@ export default function BrowsePage() {
   return (
     <div className="pt-5 pb-12 p-5">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold font-headline">All</h1>
+        <div className="flex items-center gap-6">
+          <h1 className="text-3xl font-bold font-headline">All</h1>
+          <DesktopFilterBar
+            filters={filters}
+            setFilters={setFilters}
+            categories={categories}
+          />
+        </div>
         <div className="flex items-center gap-2">
           {/* Mobile Filter Trigger - Icon next to List Item */}
           <div className="md:hidden">
@@ -144,13 +151,6 @@ export default function BrowsePage() {
       </div>
 
       <div className="mb-8 space-y-4">
-        {/* Desktop Filters */}
-        <DesktopFilterBar
-          filters={filters}
-          setFilters={setFilters}
-          categories={categories}
-        />
-
         {/* Active Filters */}
         <ActiveFilterBadges
           filters={filters}

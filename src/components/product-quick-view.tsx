@@ -101,13 +101,13 @@ export function ProductQuickView({ product, children }: ProductQuickViewProps) {
                   <Heart className="mr-2 h-4 w-4" />
                   Favourite
                 </Button>
-                {canEdit && (
-                  <Button variant="secondary" size="lg" className="flex-1">
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                )}
               </div>
+              {canEdit && (
+                <Button variant="secondary" size="lg" className="w-full">
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </Button>
+              )}
             </div>
           </div>
         </div>

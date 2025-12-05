@@ -1,29 +1,46 @@
-
 'use client';
 
-import { useUser } from '@/firebase';
-import React from 'react';
-
-// This is a compatibility layer.
-// The rest of the app uses useAuth() to get user info, but Firebase provides this via useUser().
-// We'll just re-export useUser as useAuth for now.
-// A better solution would be to refactor all useAuth() calls to useUser().
-
+import { useUser as useClerkUser } from '@clerk/nextjs';
+import { useEffect, useState } from 'react';
 import { User as CustomUser } from '@/lib/types';
+import { syncUser } from '@/actions/sync-user';
 
 export const useAuth = () => {
-    const { user: firebaseUser, isUserLoading, userError } = useUser();
+    const { user: clerkUser, isLoaded, isSignedIn } = useClerkUser();
+    const [dbUser, setDbUser] = useState<CustomUser | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    const user: CustomUser | null = firebaseUser ? {
-        ...firebaseUser,
-        id: firebaseUser.uid,
-    } : null;
+    useEffect(() => {
+        const sync = async () => {
+            if (isLoaded && isSignedIn && clerkUser) {
+                try {
+                    const user = await syncUser();
+                    if (user) {
+                        // Map Prisma user to CustomUser type if needed, or ensure types match
+                        setDbUser(user as unknown as CustomUser);
+                    }
+                } catch (error) {
+                    console.error("Failed to sync user:", error);
+                } finally {
+                    setLoading(false);
+                }
+            } else if (isLoaded && !isSignedIn) {
+                setDbUser(null);
+                setLoading(false);
+            }
+        };
 
-    return { user, loading: isUserLoading, error: userError };
+        sync();
+    }, [isLoaded, isSignedIn, clerkUser]);
+
+    return {
+        user: dbUser,
+        loading: !isLoaded || loading,
+        error: null,
+        clerkUser // Expose raw clerk user if needed
+    };
 }
 
-// The AuthProvider is now handled by the FirebaseClientProvider, 
-// so we provide a dummy one here for components that still use it.
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return <>{children}</>;
 };

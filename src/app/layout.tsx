@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { FirebaseClientProvider } from "@/firebase";
@@ -73,14 +74,16 @@ export default function RootLayout({
         <script src="https://docs.opencv.org/4.x/opencv.js" async></script>
       </head>
       <body className="font-body antialiased overflow-x-hidden" suppressHydrationWarning>
-        <FirebaseClientProvider>
-          <CartProvider>
-            <ViewedProductsProvider>
-              {children}
-              <CartDrawer />
-            </ViewedProductsProvider>
-          </CartProvider>
-        </FirebaseClientProvider>
+        <ClerkProvider>
+          <FirebaseClientProvider>
+            <CartProvider>
+              <ViewedProductsProvider>
+                {children}
+                <CartDrawer />
+              </ViewedProductsProvider>
+            </CartProvider>
+          </FirebaseClientProvider>
+        </ClerkProvider>
         <Toaster />
       </body>
     </html>
