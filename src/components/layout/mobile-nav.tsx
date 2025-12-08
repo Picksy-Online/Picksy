@@ -24,7 +24,7 @@ const browseNavItems = [
   { href: "/browse", icon: Search, label: "Browse" },
   { href: "/browse/favorites", icon: Heart, label: "Favorite Categories" },
   { href: "/auctions", icon: Gavel, label: "Auctions" },
-  { href: "/browse/wanted", icon: FileSearch, label: "Wanted" },
+  { href: "/wanted", icon: FileSearch, label: "Wanted" },
   { href: "/browse/offers", icon: Tag, label: "Offers" },
   { href: "/browse/watchlist", icon: Eye, label: "My Watchlist" },
   { href: "/browse/following", icon: Users, label: "Following" },

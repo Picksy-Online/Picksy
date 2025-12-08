@@ -13,6 +13,7 @@ export type User = Partial<FirebaseUser> & {
   birthDate?: string;
   privateCollectionPassword?: string;
   postcode?: string;
+  role?: 'USER' | 'ADMIN' | 'SUPERADMIN';
 };
 
 export type Category = {

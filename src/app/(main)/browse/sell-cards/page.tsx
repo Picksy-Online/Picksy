@@ -27,6 +27,7 @@ import {
   Gem,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
 
 // AI Flows
 import { checkCardCondition, CheckCardConditionOutput } from '@/ai/flows/check-card-condition';
@@ -55,6 +56,7 @@ type DraftItem = {
 };
 
 export default function SellCardsPage() {
+  const { user } = useAuth();
   // Store objects instead of just strings
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
@@ -147,6 +149,24 @@ export default function SellCardsPage() {
 
   const handleAnalyze = async () => {
     if (!currentDraft) return;
+    // Role Check
+    if (user?.role !== 'SUPERADMIN' && user?.role !== 'ADMIN') {
+      toast({
+        variant: "destructive", // or "default" if we want less aggressive
+        title: "Access Restricted",
+        description: "Only Superadmins can analyze card quality.",
+      });
+      return;
+    }
+
+    if (!currentDraft?.frontImage || !currentDraft?.backImage) {
+      toast({
+        variant: "destructive",
+        title: "Images Required",
+        description: "Please capture both Front and Back images for analysis.",
+      });
+      return;
+    }
     setIsLoading(true);
 
     try {
