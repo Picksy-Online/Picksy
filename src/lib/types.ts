@@ -35,6 +35,7 @@ export type Product = {
   gradingCompany?: 'PSA' | 'BGS' | 'CGC' | 'SGC' | 'Raw';
   grade?: string;
   certNumber?: string;
+  year?: number;
 };
 
 export type Auction = {

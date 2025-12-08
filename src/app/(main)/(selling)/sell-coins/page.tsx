@@ -29,7 +29,8 @@ import { suggestCardPrice, SuggestCardPriceOutput } from '@/ai/flows/suggest-pri
 import { generateCardDescription, GenerateCardDescriptionOutput } from '@/ai/flows/generate-description';
 import { products } from '@/lib/data';
 import { ImageCropper } from '@/components/image-cropper';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CameraCapture } from '@/components/camera-capture';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type AnalysisState = {
     condition?: CheckCardConditionOutput;
@@ -55,6 +56,10 @@ export default function SellCoinsPage() {
         price: '',
         description: '',
         shippingCost: '',
+        // Grading fields
+        gradingCompany: '',
+        grade: '',
+        certNumber: '',
     });
 
     const [deliveryMethods, setDeliveryMethods] = useState({
@@ -70,7 +75,11 @@ export default function SellCoinsPage() {
 
     const [activeCaptureSide, setActiveCaptureSide] = useState<'front' | 'back' | 'additional' | null>(null);
 
-    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+    // We can keep this if we want to disable buttons before permission is granted, 
+    // but CameraCapture handles permission request on mount. 
+    // For simplicity, we'll assume permission is handled by the component when active.
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(true);
+
     const [uncroppedImageSrc, setUncroppedImageSrc] = useState<string | null>(null);
     const [isCropperOpen, setIsCropperOpen] = useState(false);
 
@@ -78,49 +87,7 @@ export default function SellCoinsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [analysis, setAnalysis] = useState<AnalysisState | null>(null);
 
-    const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const { toast } = useToast();
-
-    useEffect(() => {
-        const getCameraPermission = async () => {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                setHasCameraPermission(false);
-                return;
-            }
-            try {
-                // Stop any existing tracks
-                if (videoRef.current && videoRef.current.srcObject) {
-                    const stream = videoRef.current.srcObject as MediaStream;
-                    stream.getTracks().forEach(track => track.stop());
-                }
-
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: facingMode }
-                });
-                setHasCameraPermission(true);
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                }
-            } catch (error) {
-                console.error('Error accessing camera:', error);
-                setHasCameraPermission(false);
-                toast({
-                    variant: 'destructive',
-                    title: 'Camera Access Denied',
-                    description:
-                        'Please enable camera permissions in your browser settings.',
-                });
-            }
-        };
-        getCameraPermission();
-    }, [toast, facingMode]);
-
-    const toggleCamera = () => {
-        setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
-    };
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -141,21 +108,12 @@ export default function SellCoinsPage() {
 
     const captureImage = (side: 'front' | 'back' | 'additional') => {
         setActiveCaptureSide(side);
-        if (videoRef.current && canvasRef.current) {
-            const video = videoRef.current;
-            const canvas = canvasRef.current;
-            const context = canvas.getContext('2d');
+    };
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            if (context) {
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const dataUrl = canvas.toDataURL('image/jpeg');
-                setUncroppedImageSrc(dataUrl);
-                setIsCropperOpen(true);
-            }
-        }
+    const handleCameraCapture = (imageData: string) => {
+        setUncroppedImageSrc(imageData);
+        setIsCropperOpen(true);
+        // Note: activeCaptureSide remains set, so we know where to save after crop
     };
 
     const handleCropComplete = (croppedImage: string) => {
@@ -229,21 +187,6 @@ export default function SellCoinsPage() {
         }
     };
 
-    const reset = () => {
-        setFrontImageSrc(null);
-        setBackImageSrc(null);
-        setAdditionalImages([]);
-        setUncroppedImageSrc(null);
-        setAnalysis(null);
-        setIsLoading(false);
-    };
-
-    const openCropper = () => {
-        if (uncroppedImageSrc) {
-            setIsCropperOpen(true);
-        }
-    };
-
     const handleDeliveryChange = (method: keyof typeof deliveryMethods) => {
         setDeliveryMethods(prev => ({ ...prev, [method]: !prev[method] }));
     };
@@ -278,8 +221,12 @@ export default function SellCoinsPage() {
         setIsCropperOpen(false);
     };
 
-    const handleSubmit = () => {
-        const totalImages = (frontImageSrc ? 1 : 0) + (backImageSrc ? 1 : 0) + additionalImages.length;
+    // Listing Type State
+    const [listingType, setListingType] = useState<'raw' | 'graded'>('raw');
+
+    // ... (existing form data) ...
+
+    const handleSubmit = async () => {
         if (!frontImageSrc || !backImageSrc) {
             toast({
                 variant: "destructive",
@@ -288,12 +235,52 @@ export default function SellCoinsPage() {
             });
             return;
         }
-        // Proceed with submission logic...
-        toast({
-            title: "Listing Created",
-            description: "Your coin has been listed for sale!",
-        });
-        resetForm();
+
+        setIsLoading(true);
+        try {
+            const { createListing } = await import('@/actions/create-listing');
+
+            // Gather images
+            const images = [frontImageSrc, backImageSrc, ...additionalImages];
+
+            const result = await createListing({
+                name: formData.coinName || 'Untitled Coin',
+                description: formData.description,
+                price: parseFloat(formData.price) || 0,
+                category: 'Collector Coins',
+                images: images,
+                year: parseInt(formData.year) || undefined,
+
+                // Coin Specifics
+                denomination: formData.denomination,
+                country: formData.country,
+
+                // Grading
+                isGraded: listingType === 'graded',
+                gradingCompany: formData.gradingCompany, // Need to add these to formData state if not there, wait.
+                grade: formData.grade,
+                certNumber: formData.certNumber,
+            });
+
+            if (result.success) {
+                toast({
+                    title: "Success! 🪙",
+                    description: "Your coin has been listed on the marketplace.",
+                    className: "bg-green-600 text-white border-none"
+                });
+                resetForm();
+            } else {
+                throw new Error(result.error);
+            }
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Listing Failed',
+                description: error.message || 'Could not save to database.'
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -312,8 +299,6 @@ export default function SellCoinsPage() {
                 </p>
             </div>
 
-            <canvas ref={canvasRef} className="hidden" />
-
             <ImageCropper
                 imageSrc={uncroppedImageSrc}
                 isOpen={isCropperOpen}
@@ -321,6 +306,17 @@ export default function SellCoinsPage() {
                 onCropComplete={handleCropComplete}
                 cropShape="round"
             />
+
+            {/* Full Screen Camera Overlay */}
+            {activeCaptureSide && !isCropperOpen && (
+                <div className="fixed inset-0 z-50 bg-black flex flex-col">
+                    <CameraCapture
+                        onCapture={handleCameraCapture}
+                        onClose={() => setActiveCaptureSide(null)}
+                        className="flex-1 h-full rounded-none"
+                    />
+                </div>
+            )}
 
             <div className="grid gap-8 lg:grid-cols-2">
                 {/* Image Capture Section */}
@@ -333,48 +329,8 @@ export default function SellCoinsPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {/* Camera View */}
-                            {/* Camera View */}
-                            <div className="relative w-full max-w-[300px] mx-auto overflow-hidden border-2 border-dashed rounded-lg aspect-square border-primary/50 flex items-center justify-center bg-muted/20">
-                                <video
-                                    ref={videoRef}
-                                    className="w-full h-full object-cover"
-                                    autoPlay
-                                    muted
-                                    playsInline
-                                />
 
-                                {/* Camera Guide Overlay */}
-                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                                    <div className="w-[80%] aspect-square border-4 border-white/50 rounded-full flex items-center justify-center">
-                                        <p className="text-white/70 text-xs font-medium bg-black/50 px-2 py-1 rounded mt-16">
-                                            Align coin within circle
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Flip Camera Button */}
-                                <Button
-                                    variant="secondary"
-                                    size="icon"
-                                    className="absolute top-2 right-2 z-10 rounded-full bg-black/50 hover:bg-black/70 text-white border-none"
-                                    onClick={toggleCamera}
-                                >
-                                    <RefreshCcw className="h-4 w-4" />
-                                    <span className="sr-only">Flip Camera</span>
-                                </Button>
-                            </div>
-
-                            {hasCameraPermission === false && (
-                                <Alert variant="destructive" className="mt-4">
-                                    <AlertTitle>Camera Not Available</AlertTitle>
-                                    <AlertDescription>
-                                        Camera access is required. Please check your browser settings and refresh the page.
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-
-                            {/* Capture Buttons */}
+                            {/* Capture Buttons Grid */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <p className="text-sm font-medium text-center">Front</p>
@@ -392,7 +348,7 @@ export default function SellCoinsPage() {
                                         </div>
                                     ) : (
                                         <div className="flex gap-2">
-                                            <Button onClick={() => captureImage('front')} className="flex-1" variant="outline" disabled={!hasCameraPermission}>
+                                            <Button onClick={() => captureImage('front')} className="flex-1" variant="outline">
                                                 Capture Front
                                             </Button>
                                             <div className="relative">
@@ -428,7 +384,7 @@ export default function SellCoinsPage() {
                                         </div>
                                     ) : (
                                         <div className="flex gap-2">
-                                            <Button onClick={() => captureImage('back')} className="flex-1" variant="outline" disabled={!hasCameraPermission}>
+                                            <Button onClick={() => captureImage('back')} className="flex-1" variant="outline">
                                                 Capture Back
                                             </Button>
                                             <div className="relative">
@@ -458,7 +414,7 @@ export default function SellCoinsPage() {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => captureImage('additional')}
-                                        disabled={!hasCameraPermission || additionalImages.length >= 3 || ((frontImageSrc ? 1 : 0) + (backImageSrc ? 1 : 0) + additionalImages.length >= 5)}
+                                        disabled={additionalImages.length >= 3 || ((frontImageSrc ? 1 : 0) + (backImageSrc ? 1 : 0) + additionalImages.length >= 5)}
                                     >
                                         <Plus className="w-4 h-4 mr-1" /> Add
                                     </Button>
@@ -536,7 +492,22 @@ export default function SellCoinsPage() {
                                                 </div>
                                             </div>
                                         )}
-                                        {/* ... existing price and description display ... */}
+                                        {analysis.price && (
+                                            <div>
+                                                <h3 className="font-semibold flex items-center gap-2"><Tag /> Price Suggestion</h3>
+                                                <div className="p-3 mt-1 text-sm rounded-md bg-muted">
+                                                    <p><strong>Suggested:</strong> ${analysis.price.suggestedPrice.toFixed(2)}</p>
+                                                    <p><strong>Range:</strong> ${analysis.price.priceRange.min.toFixed(2)} - ${analysis.price.priceRange.max.toFixed(2)}</p>
+                                                    <p className="mt-2 text-xs"><i>{analysis.price.justification}</i></p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {analysis.description && (
+                                            <div>
+                                                <h3 className="font-semibold flex items-center gap-2"><FileText /> Generated Description</h3>
+                                                <p className="p-3 mt-1 text-sm rounded-md bg-muted">{analysis.description.description}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </CardContent>
@@ -554,6 +525,44 @@ export default function SellCoinsPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            <Tabs value={listingType} onValueChange={(v) => setListingType(v as 'raw' | 'graded')} className="w-full mb-6">
+                                <TabsList className="grid w-full grid-cols-2 h-10">
+                                    <TabsTrigger value="raw">Raw Coin</TabsTrigger>
+                                    <TabsTrigger value="graded">Graded Coin</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="graded" className="space-y-4 mt-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label>Grading Service</Label>
+                                            <Input
+                                                name="gradingCompany"
+                                                value={formData.gradingCompany}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g. PCGS, NGC"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label>Grade</Label>
+                                            <Input
+                                                name="grade"
+                                                value={formData.grade}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g. MS70"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Cert Number</Label>
+                                        <Input
+                                            name="certNumber"
+                                            value={formData.certNumber}
+                                            onChange={handleInputChange}
+                                            placeholder="Certification Number"
+                                        />
+                                    </div>
+                                </TabsContent>
+                            </Tabs>
+
                             <div className="space-y-2">
                                 <Label htmlFor="coinName">Coin Name</Label>
                                 <Input

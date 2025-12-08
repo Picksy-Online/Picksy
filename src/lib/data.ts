@@ -255,7 +255,8 @@ export const products: Product[] = [
     imageHint: 'basketball player',
     gradingCompany: 'PSA',
     grade: '10',
-    certNumber: '87654321'
+    certNumber: '87654321',
+    year: 1986
   },
   {
     id: 'prod_16',

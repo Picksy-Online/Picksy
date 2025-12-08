@@ -7,6 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -22,13 +23,14 @@ model User {
   birthDate String?
   privateCollectionPassword String?
   
-  friendIds String[] 
-  blockedSellerIds String[]
+  friendIds String? // JSON string
+  blockedSellerIds String? // JSON string
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   products Product[]
+  orders   Order[]   @relation("BuyerOrders")
 }
 
 model Product {
@@ -37,12 +39,85 @@ model Product {
   description String
   price       Float
   category    String
-  imageUrls   String[]
+  imageUrls   String // JSON string
   imageHint   String?
+  year        Int?
+  
+  // Coin Specifics
+  denomination String?
+  country     String?
+  
+  // Grading Specifics
+  isGraded    Boolean  @default(false)
+  gradingCompany String?
+  grade       String?
+  certNumber  String?
   
   sellerId    String
   seller      User     @relation(fields: [sellerId], references: [id])
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+}
+
+enum OrderStatus {
+  ORDER_PLACED
+  SHIPPED_TO_HUB
+  HUB_VERIFYING
+  VERIFIED_LEGIT
+  VERIFICATION_FAILED
+  SHIPPED_TO_BUYER
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  buyerId         String
+  buyer           User        @relation("BuyerOrders", fields: [buyerId], references: [id])
+  totalAmount     Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  status          OrderStatus @default(ORDER_PLACED)
+  
+  trackingToHub   String?
+  trackingToBuyer String?
+  verificationNotes String?
+  hubId           String?
+
+  items           OrderItem[]
+  shipments       Shipment[]
+}
+
+model OrderItem {
+  id              String      @id @default(cuid())
+  orderId         String
+  order           Order       @relation(fields: [orderId], references: [id])
+  productId       String
+  product         Product     @relation(fields: [productId], references: [id])
+  
+  verificationStatus String   @default("PENDING") // VerificationStatus
+  verificationNotes  String?
+  verifiedBy         String?
+  
+  intakePhotos       String? // JSON string
+}
+
+model Shipment {
+  id              String        @id @default(cuid())
+  orderId         String
+  order           Order         @relation(fields: [orderId], references: [id])
+  
+  carrier         String
+  trackingNumber  String
+  labelUrl        String?
+  
+  type            String        // ShipmentType
+  
+  status          String        @default("CREATED") // ShipmentStatus
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }

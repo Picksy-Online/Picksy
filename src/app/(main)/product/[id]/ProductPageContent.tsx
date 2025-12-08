@@ -145,6 +145,12 @@ export default function ProductPageContent({ product, initialRecommendedProducts
               />
             )}
 
+            {product.year && (
+              <Badge variant="outline" className="mt-2 text-sm">
+                Year: {product.year}
+              </Badge>
+            )}
+
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight font-headline lg:text-5xl">
               {product.name}
             </h1>

@@ -34,6 +34,7 @@ const CheckCardConditionOutputSchema = z.object({
   edges: z.string().optional().describe('An assessment of the card\'s edges.'),
   surface: z.string().optional().describe('An assessment of the card\'s surface.'),
   overallGrade: z.string().optional().describe('An estimated overall grade.'),
+  confidence: z.number().min(0).max(1).describe('A score from 0.0 to 1.0 indicating confidence in the grade assessment. Lower confidence if images are blurry, dark, or key areas are hidden.'),
 });
 export type CheckCardConditionOutput = z.infer<
   typeof CheckCardConditionOutputSchema
@@ -54,6 +55,8 @@ const prompt = ai.definePrompt({
 First, assess the image quality. The images might be cropped tightly to the card. This is ACCEPTABLE. Only reject if the card is significantly blurry or major parts are missing. Do not reject simply because there is no background visible.
 
 If the quality is sufficient, set "isImageQualitySufficient" to true and proceed to assess the condition based on: centering, corners, edges, and surface (front and back). Provide an estimated overall grade.
+
+Also provide a "confidence" score (0.0 - 1.0). If the image is perfect, 1.0. If lighting is poor or glare hides details, reduce the score.
 
 Front Image: {{media url=frontImageUri}}
 Back Image: {{media url=backImageUri}}`,
